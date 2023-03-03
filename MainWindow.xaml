@@ -6,8 +6,13 @@
         xmlns:local="clr-namespace:Csaladfa"
         x:Class="Csaladfa.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="800" Width="1500">
     <Grid>
-        <Canvas Background="#FFA0A0A0" x:Name="canvas"/>
+        <Canvas
+            Background="#FFA0A0A0"
+            x:Name="canvas"
+            MouseLeftButtonDown="canvas_MouseLeftButtonDown"
+            MouseLeftButtonUp="canvas_MouseLeftButtonUp"
+            MouseMove="canvas_MouseMove"/>
     </Grid>
 </Window>
