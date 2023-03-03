@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.117" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Syncfusion.SfDiagram.WPF">
+      <HintPath>..\..\.nuget\packages\syncfusion.sfdiagram.wpf\20.4.0.52\lib\net6.0-windows7.0\Syncfusion.SfDiagram.WPF.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
