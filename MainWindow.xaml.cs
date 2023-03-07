@@ -12,65 +12,61 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DB;
 
 namespace Csaladfa
 {
-    class Person
+    public partial class MainWindow : Window
     {
-        public string? FirstName = "";
-        public string? LastName = "";
-        public GenderEnum? Gender;
-
-        public enum GenderEnum
-        {
-            Male, Female, Other
-        }
-
-        private static Brush GenderToBrush(GenderEnum? gender)
-        {
-            if (gender == null)
-                return Brushes.Gray;
-            switch (gender)
-            {
-            case GenderEnum.Male:
-                return Brushes.LightBlue;
-            case GenderEnum.Female:
-                return Brushes.LightPink;
-            case GenderEnum.Other:
-            default:
-                return Brushes.LightYellow;
-            }
-        }
-
         public static int PERSON_RECT_W = 250;
         public static int PERSON_RECT_H = 100;
 
-        public void Draw(Canvas canvas, int x, int y)
-        {
-            var rect = new Polygon();
-            rect.Fill = GenderToBrush(Gender);
-            rect.Stroke = new LinearGradientBrush(Colors.Green, Colors.Blue, 10);
-            rect.StrokeThickness = 5;
-            rect.Points.Add(new Point(x - MainWindow.CanvasPanX, y - MainWindow.CanvasPanY));
-            rect.Points.Add(new Point(x - MainWindow.CanvasPanX + PERSON_RECT_W, y - MainWindow.CanvasPanY));
-            rect.Points.Add(new Point(x - MainWindow.CanvasPanX + PERSON_RECT_W, y + PERSON_RECT_H - MainWindow.CanvasPanY));
-            rect.Points.Add(new Point(x - MainWindow.CanvasPanX, y + PERSON_RECT_H - MainWindow.CanvasPanY));
-            rect.Cursor = Cursors.Hand;
-            canvas.Children.Add(rect);
-        }
-    }
-
-    public partial class MainWindow : Window
-    {
-        static public double CanvasPanX = -Person.PERSON_RECT_W*2+20;
-        static public double CanvasPanY = -800/2+Person.PERSON_RECT_H/2;
+        static public double CanvasPanX = 450-PERSON_RECT_W*2+20;
+        static public double CanvasPanY = -500/2+PERSON_RECT_H/2;
         private Point _prevCursPos = new Point();
         private bool _isMouseDown = false;
+
+        private DB.DB _db;
+
+        public void Draw(Canvas canvas, Person pers, int x, int y)
+        {
+            var rect = new Polygon();
+            rect.Fill = pers.GenderToBrush();
+            rect.Stroke = Brushes.Gray;
+            rect.StrokeThickness = 5;
+            rect.Points.Add(new Point(x - CanvasPanX, y - CanvasPanY));
+            rect.Points.Add(new Point(x - CanvasPanX + PERSON_RECT_W, y - CanvasPanY));
+            rect.Points.Add(new Point(x - CanvasPanX + PERSON_RECT_W, y + PERSON_RECT_H - CanvasPanY));
+            rect.Points.Add(new Point(x - CanvasPanX, y + PERSON_RECT_H - CanvasPanY));
+            rect.Cursor = Cursors.Hand;
+            canvas.Children.Add(rect);
+
+            var nameText = new TextBlock();
+            nameText.Text = $"{pers.forename} {pers.surname}";
+            nameText.FontSize = 16;
+            nameText.FontWeight = FontWeights.Bold;
+            nameText.Foreground = Brushes.Black;
+            Canvas.SetLeft(nameText, x - CanvasPanX + 10);
+            Canvas.SetTop(nameText, y - CanvasPanY + 10);
+            canvas.Children.Add(nameText);
+
+            var dateText = new TextBlock();
+            dateText.Text = $"{pers.birth_year} - {pers.death_year}";
+            dateText.FontSize = 14;
+            dateText.Foreground = Brushes.Black;
+            Canvas.SetLeft(dateText, x - CanvasPanX + 10);
+            Canvas.SetTop(dateText, y - CanvasPanY + 30);
+            canvas.Children.Add(dateText);
+        }
 
         public MainWindow()
         {
             InitializeComponent();
+
+            _db = new DB.DB();
+
             Redraw();
+            UpdatePersonList();
         }
 
         private void canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -100,12 +96,26 @@ namespace Csaladfa
             canvas.Children.Clear();
 
             Person person1 = new Person();
-            person1.Gender = Person.GenderEnum.Male;
-            person1.Draw(canvas, 0, 0);
+            person1.gender = 'M';
+            person1.forename = "Kis";
+            person1.surname = "János";
+            person1.birth_year = 1958;
+            person1.death_year = 1998;
+            Draw(canvas, person1, 0, 0);
 
             Person person2 = new Person();
-            person2.Gender = Person.GenderEnum.Female;
-            person2.Draw(canvas, 20 + Person.PERSON_RECT_W, 0);
+            person2.gender = 'F';
+            Draw(canvas, person2, 20 + PERSON_RECT_W, 0);
+        }
+
+        private void UpdatePersonList()
+        {
+            var people = _db.getAllPeople();
+            PersonList.Items.Clear();
+            foreach (var p in people)
+            {
+                PersonList.Items.Add(p);
+            }
         }
     }
 }

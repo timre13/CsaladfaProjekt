@@ -70,7 +70,7 @@ namespace DB
     {
         public string person_cols = "id, parentsID, surname, forename, maiden_surname, maiden_forename, gender, " +
             "birthPlace, deathPlace, birth_year, birth_month, birth_day, " +
-            "death_year, death_month, death_day, death_cause, occupation, note";
+            "death_year, death_month, death_day, death_cause, occupation, notes";
 
         public string relationship_cols = "id, husband, wife, location, date_year, date_month, date_day, legal";
     }
@@ -185,7 +185,7 @@ namespace DB
 
         ~DB()
         {
-            _conn.Close();
+            //_conn.Close();
             Debug.WriteLine("DB connection closed");
         }
     }
