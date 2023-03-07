@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace DB
 {
@@ -13,7 +14,7 @@ namespace DB
         public int parents;
         public string surname, forename;
         public string maiden_surname, maiden_forename;
-        public char gender;
+        public char? gender;
         
         public int birthPlace;
         public int deathPlace;
@@ -28,6 +29,22 @@ namespace DB
         public Person()
         {
 
+        }
+
+        public Brush GenderToBrush()
+        {
+            if (gender == null)
+                return Brushes.Gray;
+            switch (gender)
+            {
+            case 'M':
+                return Brushes.LightBlue;
+            case 'F':
+                return Brushes.LightPink;
+            case 'X':
+            default:
+                return Brushes.LightYellow;
+            }
         }
     }
 
