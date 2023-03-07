@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Csaladfa;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Diagnostics;
+using System.Reflection.PortableExecutable;
 using System.Windows.Documents;
 
 namespace DB
@@ -29,6 +31,12 @@ namespace DB
         {
 
         }
+
+        /*public Person[] sibblings()
+        {
+            ExecWriterCmd("");
+        }*/
+
     }
 
 
@@ -43,32 +51,38 @@ namespace DB
             _conn = new SQLiteConnection(builder.ConnectionString);
             _conn.Open();
             Debug.WriteLine("DB connection opened");
-        
+
         }
 
-        public void initializeDatabase()
+        private SQLiteDataReader ExecReaderCmd(string command)
         {
-            // ExecWriterCmd();
+            Debug.WriteLine($"Executing reader command: \"{command}\"");
+            using (SQLiteCommand cmd = _conn.CreateCommand())
+            {
+                cmd.CommandText = command;
+                return cmd.ExecuteReader();
+            }
         }
 
-
-        /*
-        public void AddPerson(string name)
+        private int ExecWriterCmd(string command)
         {
-            ExecWriterCmd($"INSERT INTO people VALUES (name={name}");
+            Debug.WriteLine($"Executing writer command: \"{command}\"");
+            using (SQLiteCommand cmd = _conn.CreateCommand())
+            {
+                cmd.CommandText = command;
+                return cmd.ExecuteNonQuery();
+            }
         }
-        */
 
-        public Person getPersonByID(int id)
+        public string columns = "id, parentsID, surname, forename, maiden_surname, maiden_forename, gender, " +
+            "birthPlace, deathPlace, birth_year, birth_month, birth_day, " +
+            "death_year, death_month, death_day, death_cause, occupation, note";
+
+
+        public Person getPersonFromReader(SQLiteDataReader reader)
         {
-            var reader = ExecReaderCmd($"SELECT id, parentsID, surname, forename, maiden_surname, maiden_forename," +
-                $"gender,birthPlace, deathPlace, birth_year, birth_month, birth_day, death_year, death_month, death_day," +
-                $"death_cause, occupation, notes FROM person WHERE id = {id}");
-
-            reader.Read();
-
             Person person = new Person();
-            
+
             person.id = reader.GetInt32(0);
             person.parents = reader.GetInt32(1);
             person.surname = reader.GetString(2);
@@ -92,32 +106,47 @@ namespace DB
             person.occupation = reader.GetString(15);
             person.notes = reader.GetString(16);
 
-
             return person;
-
         }
 
 
 
-        private SQLiteDataReader ExecReaderCmd(string command)
+        public void addPerson(Person p)
         {
-            Debug.WriteLine($"Executing reader command: \"{ command }\"");
-            using (SQLiteCommand cmd = _conn.CreateCommand())
-            {
-                cmd.CommandText = command;
-                return cmd.ExecuteReader();
-            }
+            ExecWriterCmd($"INSERT INTO table ({columns})\r\n" +
+                          $"VALUES({p.id}, {p.parents}, {p.surname}, {p.forename}, {p.maiden_surname}, " +
+                          $"{p.maiden_forename}, {p.gender}, {p.birthPlace}, {p.deathPlace}, " +
+                          $"{p.birth_year}, {p.birth_month}, {p.birth_day}, {p.death_year}, " +
+                          $"{p.death_month}, {p.death_day}, {p.death_cause}, {p.occupation}, {p.notes});");
         }
 
-        private int ExecWriterCmd(string command)
+
+        public Person getPerson(int id)
         {
-            Debug.WriteLine($"Executing writer command: \"{command}\"");
-            using (SQLiteCommand cmd = _conn.CreateCommand())
-            {
-                cmd.CommandText = command;
-                return cmd.ExecuteNonQuery();
-            }
+            var reader = ExecReaderCmd($"SELECT {columns} FROM person WHERE id = {id}");
+
+            reader.Read();
+            return getPersonFromReader(reader);
+
         }
+
+        public Person[] getAllPeople() {
+
+            var reader = ExecReaderCmd($"SELECT {columns} FROM person");
+  
+            List<Person> people = new List<Person>();
+
+            while (reader.Read())
+            {
+                people.Add(getPersonFromReader(reader));
+            }
+
+            return people.ToArray();
+
+        }
+
+
+
 
         ~DB()
         {
