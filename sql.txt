@@ -1,0 +1,54 @@
+
+CREATE TABLE relationship(
+	id INTEGER PRIMARY KEY NOT NULL,
+	husband INTEGER,
+	wife INTEGER,
+	location INTEGER,
+	date_year INTEGER,
+	date_month INTEGER,
+	date_day INTEGER,
+	legal INTEGER NOT NULL
+
+);
+
+
+
+CREATE TABLE person ( 
+	id INTEGER PRIMARY KEY NOT NULL,
+	parentsID INTEGER,
+	surname TEXT,
+	forename TEXT,
+	maiden_surname TEXT,
+	maiden_forename TEXT,
+	gender TEXT,
+	birthPlace INTEGER,
+	deathPlace INTEGER,
+	birth_year INTEGER,
+	birth_month INTEGER,
+	birth_day INTEGER,
+	death_year INTEGER,
+	death_month INTEGER,
+	death_day INTEGER,
+	death_cause TEXT,
+	occupation TEXT,
+	notes TEXT
+
+);
+
+CREATE TABLE settlement(
+	id INTEGER PRIMARY KEY NOT NULL,
+	settlement TEXT(10),
+	provinceID INTEGER,
+	countryID INTEGER
+);
+
+CREATE TABLE province(
+	id INTEGER PRIMARY KEY NOT NULL,
+	county TEXT(10)
+);
+
+CREATE TABLE country(
+	id INTEGER PRIMARY KEY NOT NULL,
+	country TEXT(12)
+);
+	
