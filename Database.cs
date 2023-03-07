@@ -10,6 +10,13 @@ using System.Windows.Media;
 namespace DB
 {
 
+    public class Relationship
+    {
+        int id;
+        int husband, wife;
+    }
+
+
     public class Person
     {
         public int id;
@@ -159,7 +166,7 @@ namespace DB
 
         public Person[] getAllPeople() {
 
-            var reader = ExecReaderCmd($"SELECT {columns} FROM person");
+            var reader = ExecReaderCmd($"SELECT {txt.person_cols} FROM person");
   
             List<Person> people = new List<Person>();
 
