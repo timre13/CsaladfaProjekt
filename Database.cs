@@ -5,6 +5,7 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using System.Reflection.PortableExecutable;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace DB
 {
@@ -15,7 +16,7 @@ namespace DB
         public int parents;
         public string surname, forename;
         public string maiden_surname, maiden_forename;
-        public char gender;
+        public char? gender;
         
         public int birthPlace;
         public int deathPlace;
@@ -32,17 +33,46 @@ namespace DB
 
         }
 
-        /*public Person[] sibblings()
+        public Brush GenderToBrush()
         {
-            ExecWriterCmd("");
-        }*/
+            if (gender == null)
+                return Brushes.Gray;
+            switch (gender)
+            {
+            case 'M':
+                return Brushes.LightBlue;
+            case 'F':
+                return Brushes.LightPink;
+            case 'X':
+            default:
+                return Brushes.LightYellow;
+            }
+        }
+
+        public DB db = new DB();
+
+        public Person[] sibblings()
+        {
+            db.ExecWriterCmd("SELECT");
+        }
+
 
     }
+
+    public class txt
+    {
+        public string person_cols = "id, parentsID, surname, forename, maiden_surname, maiden_forename, gender, " +
+            "birthPlace, deathPlace, birth_year, birth_month, birth_day, " +
+            "death_year, death_month, death_day, death_cause, occupation, note";
+
+        public string relationship_cols = "id, husband, wife, location, date_year, date_month, date_day, legal"
+    }
+
 
 
     public class DB
     {
-        private SQLiteConnection _conn;
+        public SQLiteConnection _conn;
 
         public DB()
         {
@@ -54,7 +84,7 @@ namespace DB
 
         }
 
-        private SQLiteDataReader ExecReaderCmd(string command)
+        public SQLiteDataReader ExecReaderCmd(string command)
         {
             Debug.WriteLine($"Executing reader command: \"{command}\"");
             using (SQLiteCommand cmd = _conn.CreateCommand())
@@ -64,7 +94,7 @@ namespace DB
             }
         }
 
-        private int ExecWriterCmd(string command)
+        public int ExecWriterCmd(string command)
         {
             Debug.WriteLine($"Executing writer command: \"{command}\"");
             using (SQLiteCommand cmd = _conn.CreateCommand())
@@ -74,9 +104,7 @@ namespace DB
             }
         }
 
-        public string columns = "id, parentsID, surname, forename, maiden_surname, maiden_forename, gender, " +
-            "birthPlace, deathPlace, birth_year, birth_month, birth_day, " +
-            "death_year, death_month, death_day, death_cause, occupation, note";
+
 
 
         public Person getPersonFromReader(SQLiteDataReader reader)
