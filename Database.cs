@@ -12,8 +12,11 @@ namespace DB
 
     public class Relationship
     {
-        int id;
-        int husband, wife;
+        public int id;
+        public int husband, wife;
+        public int location;
+        public int date_year, date_month, date_day;
+        public bool legal;
     }
 
 
@@ -57,11 +60,14 @@ namespace DB
         }
 
         public DB db = new DB();
-        /*
+        
         public Person[] sibblings()
         {
             db.ExecWriterCmd("SELECT");
-        }*/
+
+
+            return new Person[0];
+        }
 
 
     }
@@ -70,7 +76,7 @@ namespace DB
     {
         public string person_cols = "id, parentsID, surname, forename, maiden_surname, maiden_forename, gender, " +
             "birthPlace, deathPlace, birth_year, birth_month, birth_day, " +
-            "death_year, death_month, death_day, death_cause, occupation, note";
+            "death_year, death_month, death_day, death_cause, occupation, notes";
 
         public string relationship_cols = "id, husband, wife, location, date_year, date_month, date_day, legal";
     }
@@ -113,7 +119,7 @@ namespace DB
 
         
 
-        public Person getPersonFromReader(SQLiteDataReader reader)
+        private Person getPersonFromReader(SQLiteDataReader reader)
         {
             Person person = new Person();
 
@@ -143,6 +149,23 @@ namespace DB
             return person;
         }
 
+        private Relationship getRelationshipFromReader(SQLiteDataReader reader)
+        {
+            var relationship = new Relationship();
+
+            relationship.id = reader.GetInt32(0);
+            relationship.husband = reader.GetInt32(1);
+            relationship.wife = reader.GetInt32(2);
+            relationship.location = reader.GetInt32(3);
+            relationship.date_year = reader.GetInt32(4);
+            relationship.date_month = reader.GetInt32(5);
+            relationship.date_day = reader.GetInt32(6);
+            relationship.legal = reader.GetBoolean(7);
+
+            return relationship;
+
+    }
+
         private TXT txt = new TXT();
 
         public void addPerson(Person p)
@@ -163,6 +186,16 @@ namespace DB
             return getPersonFromReader(reader);
 
         }
+
+        public Relationship getRelationship(int id)
+        {
+            var reader = ExecReaderCmd($"SELECT {txt.relationship_cols} FROM relationship WHERE id = {id}");
+
+            reader.Read();
+            return getRelationshipFromReader(reader);
+
+        }
+
 
         public Person[] getAllPeople() {
 
