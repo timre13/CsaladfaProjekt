@@ -1,7 +1,10 @@
 ﻿using Csaladfa;
+using Microsoft.VisualBasic;
+using Syncfusion.UI.Xaml.Diagram.Stencil;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Reflection.PortableExecutable;
 using System.Windows.Documents;
@@ -13,9 +16,9 @@ namespace DB
     public class Relationship
     {
         public int id;
-        public int husband, wife;
-        public int location;
-        public int date_year, date_month, date_day;
+        public long? husband, wife;
+        public long? location;
+        public long? date_year, date_month, date_day;
         public bool legal;
     }
 
@@ -23,20 +26,20 @@ namespace DB
     public class Person
     {
         public int id;
-        public int parents;
-        public string surname, forename;
-        public string maiden_surname, maiden_forename;
+        public long? parents;
+        public string? surname, forename;
+        public string? maiden_surname, maiden_forename;
         public char? gender;
         
-        public int birthPlace;
-        public int deathPlace;
+        public long? birthPlace;
+        public long? deathPlace;
 
-        public int birth_year, birth_month, birth_day;
-        public int death_year, death_month, death_day;
+        public long? birth_year, birth_month, birth_day;
+        public long? death_year, death_month, death_day;
 
-        public string death_cause;
-        public string occupation;
-        public string notes;
+        public string? death_cause;
+        public string? occupation;
+        public string? notes;
 
         public Person()
         {
@@ -59,6 +62,19 @@ namespace DB
             }
         }
 
+        public string GenderToDisplayName()
+        {
+            if (gender == null)
+                return "???";
+            return gender switch
+            {
+                'M' => "Férfi",
+                'F' => "Nő",
+                _ => "Egyéb",
+            };
+        }
+
+        public DB db = new DB();
         
         public Person[] sibblings()
         {
@@ -125,34 +141,44 @@ namespace DB
             }
         }
 
-        
+        static private T? GetValOrNull<T>(in SQLiteDataReader reader, int col)
+        {
+            return reader.IsDBNull(col) ? default(T) : reader.GetFieldValue<T>(col);
+        }
+
+        static private char? StrToCharOrNull(in string? input)
+        {
+            if (input == null)
+                return null;
+            return input[0];
+        }
 
         public static Person getPersonFromReader(SQLiteDataReader reader)
         {
             Person person = new Person();
+            int i = 0;
 
-            person.id = reader.GetInt32(0);
-            person.parents = reader.GetInt32(1);
-            person.surname = reader.GetString(2);
-            person.forename = reader.GetString(3);
-            person.maiden_surname = reader.GetString(4);
-            person.maiden_forename = reader.GetString(5);
-            person.gender = reader.GetChar(5);
+            person.id = reader.GetInt32(i++);
+            person.parents = GetValOrNull<Int64>(reader, i++);
+            person.surname = GetValOrNull<string>(reader, i++);
+            person.forename = GetValOrNull<string>(reader, i++);
+            person.maiden_surname = GetValOrNull<string>(reader, i++);
+            person.maiden_forename = GetValOrNull<string>(reader, i++);
+            person.gender = StrToCharOrNull(GetValOrNull<string>(reader, i++));
 
+            person.birthPlace = GetValOrNull<Int64>(reader, i++);
+            person.deathPlace = GetValOrNull<Int64>(reader, i++);
 
-            person.birthPlace = reader.GetInt32(6);
-            person.deathPlace = reader.GetInt32(7);
+            person.birth_year = GetValOrNull<Int64>(reader, i++);
+            person.birth_month = GetValOrNull<Int64>(reader, i++);
+            person.birth_day = GetValOrNull<Int64>(reader, i++);
+            person.death_year = GetValOrNull<Int64>(reader, i++);
+            person.death_month = GetValOrNull<Int64>(reader, i++);
+            person.death_day = GetValOrNull<Int64>(reader, i++);
 
-            person.birth_year = reader.GetInt32(8);
-            person.birth_month = reader.GetInt32(9);
-            person.birth_day = reader.GetInt32(10);
-            person.death_year = reader.GetInt32(11);
-            person.death_month = reader.GetInt32(12);
-            person.death_day = reader.GetInt32(13);
-
-            person.death_cause = reader.GetString(14);
-            person.occupation = reader.GetString(15);
-            person.notes = reader.GetString(16);
+            person.death_cause = GetValOrNull<string>(reader, i++);
+            person.occupation = GetValOrNull<string>(reader, i++);
+            person.notes = GetValOrNull<string>(reader, i++);
 
             return person;
         }
@@ -160,15 +186,16 @@ namespace DB
         public static Relationship getRelationshipFromReader(SQLiteDataReader reader)
         {
             var relationship = new Relationship();
+            int i = 0;
 
-            relationship.id = reader.GetInt32(0);
-            relationship.husband = reader.GetInt32(1);
-            relationship.wife = reader.GetInt32(2);
-            relationship.location = reader.GetInt32(3);
-            relationship.date_year = reader.GetInt32(4);
-            relationship.date_month = reader.GetInt32(5);
-            relationship.date_day = reader.GetInt32(6);
-            relationship.legal = reader.GetBoolean(7);
+            relationship.id = reader.GetInt32(i++);
+            relationship.husband = GetValOrNull<Int64>(reader, i++);
+            relationship.wife = GetValOrNull<Int64>(reader, i++);
+            relationship.location = GetValOrNull<Int64>(reader, i++);
+            relationship.date_year = GetValOrNull<Int64>(reader, i++);
+            relationship.date_month = GetValOrNull<Int64>(reader, i++);
+            relationship.date_day = GetValOrNull<Int64>(reader, i++);
+            relationship.legal = reader.GetBoolean(i++);
 
             return relationship;
 
