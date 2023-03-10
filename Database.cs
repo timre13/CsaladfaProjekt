@@ -59,14 +59,22 @@ namespace DB
             }
         }
 
-        public DB db = new DB();
         
         public Person[] sibblings()
         {
-            db.ExecWriterCmd("SELECT");
+            Relationship parents = DB.getRelationship(this.parents);
+
+            var reader = DB.ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE parentsID = {this.parents}");
+
+            List<Person> sibblings = new List<Person>();
 
 
-            return new Person[0];
+            while (reader.Read())
+            {
+                sibblings.Add(DB.getPersonFromReader(reader));
+            }
+
+            return sibblings.ToArray();
         }
 
 
@@ -74,18 +82,18 @@ namespace DB
 
     public class TXT
     {
-        public string person_cols = "id, parentsID, surname, forename, maiden_surname, maiden_forename, gender, " +
+        public static string person_cols = "id, parentsID, surname, forename, maiden_surname, maiden_forename, gender, " +
             "birthPlace, deathPlace, birth_year, birth_month, birth_day, " +
             "death_year, death_month, death_day, death_cause, occupation, notes";
 
-        public string relationship_cols = "id, husband, wife, location, date_year, date_month, date_day, legal";
+        public static string relationship_cols = "id, husband, wife, location, date_year, date_month, date_day, legal";
     }
 
 
 
     public class DB
     {
-        public SQLiteConnection _conn;
+        public static SQLiteConnection _conn;
 
         public DB()
         {
@@ -97,7 +105,7 @@ namespace DB
 
         }
 
-        public SQLiteDataReader ExecReaderCmd(string command)
+        public static SQLiteDataReader ExecReaderCmd(string command)
         {
             Debug.WriteLine($"Executing reader command: \"{command}\"");
             using (SQLiteCommand cmd = _conn.CreateCommand())
@@ -107,7 +115,7 @@ namespace DB
             }
         }
 
-        public int ExecWriterCmd(string command)
+        public static int ExecWriterCmd(string command)
         {
             Debug.WriteLine($"Executing writer command: \"{command}\"");
             using (SQLiteCommand cmd = _conn.CreateCommand())
@@ -119,7 +127,7 @@ namespace DB
 
         
 
-        private Person getPersonFromReader(SQLiteDataReader reader)
+        public static Person getPersonFromReader(SQLiteDataReader reader)
         {
             Person person = new Person();
 
@@ -149,7 +157,7 @@ namespace DB
             return person;
         }
 
-        private Relationship getRelationshipFromReader(SQLiteDataReader reader)
+        public static Relationship getRelationshipFromReader(SQLiteDataReader reader)
         {
             var relationship = new Relationship();
 
@@ -166,11 +174,10 @@ namespace DB
 
     }
 
-        private TXT txt = new TXT();
 
         public void addPerson(Person p)
         {
-            ExecWriterCmd($"INSERT INTO table ({txt.person_cols})\r\n" +
+            ExecWriterCmd($"INSERT INTO table ({TXT.person_cols})\r\n" +
                           $"VALUES({p.id}, {p.parents}, {p.surname}, {p.forename}, {p.maiden_surname}, " +
                           $"{p.maiden_forename}, {p.gender}, {p.birthPlace}, {p.deathPlace}, " +
                           $"{p.birth_year}, {p.birth_month}, {p.birth_day}, {p.death_year}, " +
@@ -178,18 +185,18 @@ namespace DB
         }
 
 
-        public Person getPerson(int id)
+        public static Person getPerson(int id)
         {
-            var reader = ExecReaderCmd($"SELECT {txt.person_cols} FROM person WHERE id = {id}");
+            var reader = ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE id = {id}");
 
             reader.Read();
             return getPersonFromReader(reader);
 
         }
 
-        public Relationship getRelationship(int id)
+        public static Relationship getRelationship(int id)
         {
-            var reader = ExecReaderCmd($"SELECT {txt.relationship_cols} FROM relationship WHERE id = {id}");
+            var reader = ExecReaderCmd($"SELECT {TXT.relationship_cols} FROM relationship WHERE id = {id}");
 
             reader.Read();
             return getRelationshipFromReader(reader);
@@ -197,9 +204,9 @@ namespace DB
         }
 
 
-        public Person[] getAllPeople() {
+        public static Person[] getAllPeople() {
 
-            var reader = ExecReaderCmd($"SELECT {txt.person_cols} FROM person");
+            var reader = ExecReaderCmd($"SELECT {TXT.person_cols} FROM person");
   
             List<Person> people = new List<Person>();
 
