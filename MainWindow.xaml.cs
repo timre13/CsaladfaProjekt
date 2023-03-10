@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -112,10 +113,16 @@ namespace Csaladfa
         {
             var people = _db.getAllPeople();
             PersonList.Items.Clear();
+            //PersonList.ItemsSource = people;
             foreach (var p in people)
             {
-                PersonList.Items.Add(p);
+                PersonList.Items.Add(new {
+                    forename = p.forename ?? "???",
+                    surname = p.surname ?? "???",
+                    gender = p.GenderToDisplayName(),
+                });
             }
+            Debug.WriteLine("Person list: "+PersonList.Items.Count);
         }
     }
 }

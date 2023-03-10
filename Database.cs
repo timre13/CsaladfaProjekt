@@ -1,4 +1,6 @@
 ﻿using Csaladfa;
+using Microsoft.VisualBasic;
+using Syncfusion.UI.Xaml.Diagram.Stencil;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -58,6 +60,18 @@ namespace DB
             default:
                 return Brushes.LightYellow;
             }
+        }
+
+        public string GenderToDisplayName()
+        {
+            if (gender == null)
+                return "???";
+            return gender switch
+            {
+                'M' => "Férfi",
+                'F' => "Nő",
+                _ => "Egyéb",
+            };
         }
 
         public DB db = new DB();
@@ -122,7 +136,7 @@ namespace DB
         {
             return reader.IsDBNull(col) ? default(T) : reader.GetFieldValue<T>(col);
         }
-        
+
         static private char? StrToCharOrNull(in string? input)
         {
             if (input == null)
