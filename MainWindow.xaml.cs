@@ -111,7 +111,7 @@ namespace Csaladfa
 
         private void UpdatePersonList()
         {
-            var people = _db.getAllPeople();
+            var people = DB.DB.getAllPeople();
             PersonList.Items.Clear();
             //PersonList.ItemsSource = people;
             foreach (var p in people)
