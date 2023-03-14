@@ -1,6 +1,4 @@
 ﻿using Csaladfa;
-using Microsoft.VisualBasic;
-using Syncfusion.UI.Xaml.Diagram.Stencil;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -78,7 +76,10 @@ namespace DB
         
         public Person[] sibblings()
         {
-            Relationship parents = DB.getRelationship(this.parents);
+            if (this.parents == null)
+                return new Person[] { };
+
+            Relationship parents = DB.getRelationship(this.parents.Value);
 
             var reader = DB.ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE parentsID = {this.parents}");
 
@@ -221,7 +222,7 @@ namespace DB
 
         }
 
-        public static Relationship getRelationship(int id)
+        public static Relationship getRelationship(long id)
         {
             var reader = ExecReaderCmd($"SELECT {TXT.relationship_cols} FROM relationship WHERE id = {id}");
 
