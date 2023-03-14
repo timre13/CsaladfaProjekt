@@ -27,8 +27,6 @@ namespace Csaladfa
         private Point _prevCursPos = new Point();
         private bool _isMouseDown = false;
 
-        private DB.DB _db;
-
         public void Draw(Canvas canvas, Person pers, int x, int y)
         {
             var rect = new Polygon();
@@ -63,8 +61,6 @@ namespace Csaladfa
         public MainWindow()
         {
             InitializeComponent();
-
-            _db = new DB.DB();
 
             Redraw();
             UpdatePersonList();
@@ -123,6 +119,11 @@ namespace Csaladfa
                 });
             }
             Debug.WriteLine("Person list: "+PersonList.Items.Count);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            DB.DB.Close();
         }
     }
 }

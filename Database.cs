@@ -71,8 +71,6 @@ namespace DB
                 _ => "Egyéb",
             };
         }
-
-        public DB db = new DB();
         
         public Person[] sibblings()
         {
@@ -108,11 +106,11 @@ namespace DB
 
 
 
-    public class DB
+    public static class DB
     {
         public static SQLiteConnection _conn;
 
-        public DB()
+        static DB()
         {
             SQLiteConnectionStringBuilder builder = new SQLiteConnectionStringBuilder();
             builder.DataSource = "database.db";
@@ -142,12 +140,12 @@ namespace DB
             }
         }
 
-        static private T? GetValOrNull<T>(in SQLiteDataReader reader, int col)
+        private static T? GetValOrNull<T>(in SQLiteDataReader reader, int col)
         {
             return reader.IsDBNull(col) ? default(T) : reader.GetFieldValue<T>(col);
         }
 
-        static private char? StrToCharOrNull(in string? input)
+        private static char? StrToCharOrNull(in string? input)
         {
             if (input == null)
                 return null;
@@ -200,10 +198,10 @@ namespace DB
 
             return relationship;
 
-    }
+        }
 
 
-        public void addPerson(Person p)
+        public static void addPerson(Person p)
         {
             ExecWriterCmd($"INSERT INTO table ({TXT.person_cols})\r\n" +
                           $"VALUES({p.id}, {p.parents}, {p.surname}, {p.forename}, {p.maiden_surname}, " +
@@ -232,10 +230,11 @@ namespace DB
         }
 
 
-        public static Person[] getAllPeople() {
+        public static Person[] getAllPeople()
+        {
 
             var reader = ExecReaderCmd($"SELECT {TXT.person_cols} FROM person");
-  
+
             List<Person> people = new List<Person>();
 
             while (reader.Read())
@@ -247,13 +246,9 @@ namespace DB
 
         }
 
-
-
-
-
-        ~DB()
+        public static void Close()
         {
-            //_conn.Close();
+            _conn.Close();
             Debug.WriteLine("DB connection closed");
         }
     }
