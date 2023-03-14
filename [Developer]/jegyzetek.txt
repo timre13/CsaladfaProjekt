@@ -72,12 +72,13 @@ Kuka:
 	--FOREIGN KEY (birthPlace) REFERENCES settlements(id)
 	
 	
-
-	
-
-
 https://sqlitebrowser.org/dl/
 
+
+Teszt-Adatbázis:
+1-70 - Az alap család
+71-108 - A beházasodott személyek szülei
+109-147 - A beházasodott személyek testvérei
 
 
 
