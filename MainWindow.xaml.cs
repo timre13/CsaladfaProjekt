@@ -116,6 +116,8 @@ namespace Csaladfa
                     forename = p.forename ?? "???",
                     surname = p.surname ?? "???",
                     gender = p.GenderToDisplayName(),
+                    birthYear = !p.birth_year.HasValue ? "???" : p.birth_year.ToString(),
+                    deathYear = (!p.death_year.HasValue ? "???" : (p.death_year == 0 ? "-" : p.death_year.ToString())),
                 });
             }
             Debug.WriteLine("Person list: "+PersonList.Items.Count);

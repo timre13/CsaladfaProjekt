@@ -33,9 +33,11 @@
         <ListView x:Name="PersonList" Margin="0,0,1200,0" Grid.RowSpan="2">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Vezetéknév" Width="auto" DisplayMemberBinding="{Binding surname}"/>
-                    <GridViewColumn Header="Keresztnév" Width="auto" DisplayMemberBinding="{Binding forename}"/>
-                    <GridViewColumn Header="Nem" Width="auto" DisplayMemberBinding="{Binding gender}"/>
+                    <GridViewColumn Header="Vezetéknév" Width="100" DisplayMemberBinding="{Binding surname}"/>
+                    <GridViewColumn Header="Keresztnév" Width="100" DisplayMemberBinding="{Binding forename}"/>
+                    <GridViewColumn Header="Nem" Width="40" DisplayMemberBinding="{Binding gender}"/>
+                    <GridViewColumn Header="Szül. Év" Width="60" DisplayMemberBinding="{Binding birthYear}"/>
+                    <GridViewColumn Header="Hal. Év" Width="60" DisplayMemberBinding="{Binding deathYear}"/>
                 </GridView>
             </ListView.View>
         </ListView>
