@@ -9,47 +9,51 @@
         Title="MainWindow" Height="800" Width="1500"
         Closing="Window_Closing">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="395*"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="300"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
         <Canvas
             Background="#FFA0A0A0"
             x:Name="canvas"
             MouseLeftButtonDown="canvas_MouseLeftButtonDown"
             MouseLeftButtonUp="canvas_MouseLeftButtonUp"
-            MouseMove="canvas_MouseMove" Margin="300,0,300,0" Width="900"/>
-        <ListView x:Name="PersonList" Margin="0,0,1200,0">
+            MouseMove="canvas_MouseMove"  Grid.Column="1"/>
+        <ListView x:Name="PersonList" Grid.Column="0">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Vezetéknév" Width="100" DisplayMemberBinding="{Binding surname}"/>
-                    <GridViewColumn Header="Keresztnév" Width="100" DisplayMemberBinding="{Binding forename}"/>
-                    <GridViewColumn Header="Nem" Width="40" DisplayMemberBinding="{Binding gender}"/>
-                    <GridViewColumn Header="Szül. Év" Width="60" DisplayMemberBinding="{Binding birthYear}"/>
-                    <GridViewColumn Header="Hal. Év" Width="60" DisplayMemberBinding="{Binding deathYear}"/>
+                    <GridViewColumn Header="Vezetéknév" Width="100" DisplayMemberBinding="{Binding surnameDisp}"/>
+                    <GridViewColumn Header="Keresztnév" Width="100" DisplayMemberBinding="{Binding forenameDisp}"/>
+                    <GridViewColumn Header="Nem" Width="40" DisplayMemberBinding="{Binding genderDisp}"/>
+                    <GridViewColumn Header="Szül. Év" Width="60" DisplayMemberBinding="{Binding birthYearDisp}"/>
+                    <GridViewColumn Header="Hal. Év" Width="60" DisplayMemberBinding="{Binding deathYearDisp}"/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <Grid Margin="1205,10,10,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="25"/>
-                <RowDefinition Height="25"/>
-                <RowDefinition Height="25"/>
-            </Grid.RowDefinitions>
-            <Label Content="Keresztnév:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0"/>
-            <TextBox x:Name="PersonSurnameEntry" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Grid.Row="0" Grid.Column="1"/>
-            <Label Content="Vezetéknév:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0"/>
-            <TextBox x:Name="PersonForenameEntry" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Grid.Row="1" Grid.Column="1"/>
-            <Label Content="Nem:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0"/>
-            <ComboBox x:Name="GenderCombobox" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Height="25" SelectedIndex="0" Grid.Row="2" Grid.Column="1">
-                <ComboBoxItem Content="Ismeretlen"></ComboBoxItem>
-                <ComboBoxItem Content="Férfi"></ComboBoxItem>
-                <ComboBoxItem Content="Nő"></ComboBoxItem>
-                <ComboBoxItem Content="Egyéb"></ComboBoxItem>
-            </ComboBox>
+        <Grid Grid.Column="2" Background="White">
+            <Grid Margin="10,10,10,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                </Grid.RowDefinitions>
+                <Label Content="Keresztnév:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0"/>
+                <TextBox x:Name="PersonSurnameEntry" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Grid.Row="0" Grid.Column="1"/>
+                <Label Content="Vezetéknév:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0"/>
+                <TextBox x:Name="PersonForenameEntry" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Grid.Row="1" Grid.Column="1"/>
+                <Label Content="Nem:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0"/>
+                <ComboBox x:Name="GenderCombobox" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Height="25" SelectedIndex="0" Grid.Row="2" Grid.Column="1">
+                    <ComboBoxItem Content="Ismeretlen"></ComboBoxItem>
+                    <ComboBoxItem Content="Férfi"></ComboBoxItem>
+                    <ComboBoxItem Content="Nő"></ComboBoxItem>
+                    <ComboBoxItem Content="Egyéb"></ComboBoxItem>
+                </ComboBox>
+            </Grid>
         </Grid>
     </Grid>
 </Window>
