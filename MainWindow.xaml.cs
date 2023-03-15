@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -61,6 +63,14 @@ namespace Csaladfa
         public MainWindow()
         {
             InitializeComponent();
+
+            var months = new List<string> { "???" };
+            months.AddRange(Enumerable.Range(1, 12).Select(x => new DateTime(2000, x, 1).ToString("MMMM", CultureInfo.CreateSpecificCulture("hu"))));
+            BirthDateMonthInput.ItemsSource = months;
+
+            var days = new List<string> { "???" };
+            days.AddRange(Enumerable.Range(1, 31).Select(x => x.ToString()));
+            BirthDateDayInput.ItemsSource = days;
 
             Redraw();
             UpdatePersonList();
@@ -143,6 +153,12 @@ namespace Csaladfa
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             DB.DB.Close();
+        }
+
+        private static readonly Regex _yearRegex = new Regex("[0-9]+");
+        private void BirthDateYearInput_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !_yearRegex.IsMatch(e.Text) || ((sender as TextBox)!.Text.Length == 0 && e.Text[0] == '0');
         }
     }
 }

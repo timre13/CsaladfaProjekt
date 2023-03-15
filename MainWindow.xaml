@@ -10,9 +10,9 @@
         Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="300"></ColumnDefinition>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="350"/>
         </Grid.ColumnDefinitions>
         <Canvas
             Background="#FFA0A0A0"
@@ -34,24 +34,58 @@
         <Grid Grid.Column="2" Background="White">
             <Grid Margin="10,10,10,10">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
-                <Label Content="Keresztnév:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0"/>
-                <TextBox x:Name="PersonSurnameEntry" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Grid.Row="0" Grid.Column="1"/>
-                <Label Content="Vezetéknév:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0"/>
-                <TextBox x:Name="PersonForenameEntry" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Grid.Row="1" Grid.Column="1"/>
-                <Label Content="Nem:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0"/>
-                <ComboBox x:Name="GenderCombobox" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Height="25" SelectedIndex="0" Grid.Row="2" Grid.Column="1">
-                    <ComboBoxItem Content="Ismeretlen"></ComboBoxItem>
-                    <ComboBoxItem Content="Férfi"></ComboBoxItem>
-                    <ComboBoxItem Content="Nő"></ComboBoxItem>
-                    <ComboBoxItem Content="Egyéb"></ComboBoxItem>
+                
+                <Label Content="Keresztnév:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                <TextBox x:Name="PersonSurnameEntry" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="0" Grid.Column="1"/>
+
+                <Label Content="Leánykori Keresztnév:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+                <TextBox x:Name="PersonMaidenSurnameEntry" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="1" Grid.Column="1"/>
+
+                <Label Content="Vezetéknév:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"/>
+                <TextBox x:Name="PersonForenameEntry" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="2" Grid.Column="1"/>
+
+                <Label Content="Leánykori Vezetéknév:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"/>
+                <TextBox x:Name="PersonMaidenForenameEntry" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="3" Grid.Column="1"/>
+
+                <Label Content="Nem:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0"/>
+                <ComboBox x:Name="GenderCombobox" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Height="25" SelectedIndex="0" Grid.Row="4" Grid.Column="1">
+                    <ComboBoxItem Content="(Ismeretlen)" Foreground="Gray"/>
+                    <ComboBoxItem Content="Férfi"/>
+                    <ComboBoxItem Content="Nő"/>
+                    <ComboBoxItem Content="Egyéb"/>
+                </ComboBox>
+
+                <Label Content="Születési Idő:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0"/>
+                <Grid Width="200" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="5" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="35"/>
+                        <ColumnDefinition Width="95"/>
+                        <ColumnDefinition Width="70"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="BirthDateYearInput" PreviewTextInput="BirthDateYearInput_PreviewTextInput" MaxLength="4" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                    <ComboBox x:Name="BirthDateMonthInput" SelectedIndex="0" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
+                    <ComboBox x:Name="BirthDateDayInput" SelectedIndex="0" VerticalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
+                </Grid>
+
+                <Label Content="Születési Hely:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="6" Grid.Column="0"/>
+                <ComboBox x:Name="PersonBirthPlaceCombobox" SelectedIndex="0" Width="200" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="6" Grid.Column="1">
+                    <ComboBoxItem Content="(Ismeretlen)" Foreground="Gray"/>
+                    <ComboBoxItem Content="Aasdfasdf"/>
+                    <ComboBoxItem Content="Foijweofiajwef"/>
+                    <ComboBoxItem Content="Iaweofiajwef"/>
+                    <ComboBoxItem Content="Oqwaeawefawef"/>
                 </ComboBox>
             </Grid>
         </Grid>
