@@ -113,11 +113,28 @@ namespace Csaladfa
             foreach (var p in people)
             {
                 PersonList.Items.Add(new {
-                    forename = p.forename ?? "???",
-                    surname = p.surname ?? "???",
-                    gender = p.GenderToDisplayName(),
-                    birthYear = !p.birth_year.HasValue ? "???" : p.birth_year.ToString(),
-                    deathYear = (!p.death_year.HasValue ? "???" : (p.death_year == 0 ? "-" : p.death_year.ToString())),
+                    forename = p.forename,
+                    forenameDisp = p.forename ?? "???",
+                    surname = p.surname,
+                    surnameDisp = p.surname ?? "???",
+                    maidForename= p.maiden_forename,
+                    maidForenameDisp = p.maiden_forename ?? "???",
+                    maidSurname= p.maiden_surname,
+                    maidSurnameDisp = p.maiden_surname ?? "???",
+                    genderDisp = p.GenderToDisplayName(),
+                    birthPlace = p.birthPlace,
+                    deathPlace = p.deathPlace,
+                    birthYear = p.birth_year,
+                    birthYearDisp = !p.birth_year.HasValue ? "???" : p.birth_year.ToString(),
+                    birthMonth = p.birth_month,
+                    birthDay = p.birth_day,
+                    deathYear = p.death_year,
+                    deathYearDisp = (!p.death_year.HasValue ? "???" : (p.death_year == 0 ? "-" : p.death_year.ToString())),
+                    deathMonth = p.death_month,
+                    deathDay = p.death_day,
+                    deathCause = p.death_cause,
+                    occupation = p.occupation,
+                    notes = p.notes,
                 });
             }
             Debug.WriteLine("Person list: "+PersonList.Items.Count);
