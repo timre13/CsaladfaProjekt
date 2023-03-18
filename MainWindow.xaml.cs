@@ -121,17 +121,17 @@ namespace Csaladfa
         {
             var people = DB.DB.getAllPeople();
             PersonList.Items.Clear();
-            //PersonList.ItemsSource = people;
             foreach (var p in people)
             {
                 PersonList.Items.Add(new {
+                    id = p.id,
                     forename = p.forename,
                     forenameDisp = p.forename ?? "???",
                     surname = p.surname,
                     surnameDisp = p.surname ?? "???",
-                    maidForename= p.maiden_forename,
+                    maidForename = p.maiden_forename,
                     maidForenameDisp = p.maiden_forename ?? "???",
-                    maidSurname= p.maiden_surname,
+                    maidSurname = p.maiden_surname,
                     maidSurnameDisp = p.maiden_surname ?? "???",
                     genderDisp = p.GenderToDisplayName(),
                     birthPlace = p.birthPlace,
@@ -147,7 +147,7 @@ namespace Csaladfa
                     deathCause = p.death_cause,
                     occupation = p.occupation,
                     notes = p.notes,
-                });
+                }); ;
             }
             Debug.WriteLine("Person list: "+PersonList.Items.Count);
         }
@@ -161,6 +161,67 @@ namespace Csaladfa
         private void BirthOrDeathDateYearInput_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !_yearRegex.IsMatch(e.Text) || ((sender as TextBox)!.Text.Length == 0 && e.Text[0] == '0');
+        }
+
+        private void PersonList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 0) return;
+
+            dynamic? selected = e.AddedItems[0];
+            Debug.WriteLine($"Selected: { selected }");
+            SetSelectedPerson(selected?.id ?? -1);
+        }
+
+        private void SetSelectedPerson(int id)
+        {
+            var settlements = DB.DB.GetAllSettlements();
+            PersonBirthPlaceCombobox.ItemsSource = settlements;
+            PersonDeathPlaceCombobox.ItemsSource = settlements;
+
+            if (id == -1) return;
+            var person = DB.DB.getAllPeople().Where(x => x.id == id).FirstOrDefault();
+            if (person == null)
+            {
+                PersonSurnameEntry.Clear();
+                PersonMaidenSurnameEntry.Clear();
+                PersonForenameEntry.Clear();
+                PersonMaidenForenameEntry.Clear();
+                GenderCombobox.SelectedIndex = 0;
+                BirthDateYearInput.Clear();
+                BirthDateMonthInput.SelectedIndex = 0;
+                BirthDateDayInput.SelectedIndex = 0;
+                PersonBirthPlaceCombobox.SelectedIndex = 0;
+                DeathDateYearInput.Clear();
+                DeathDateMonthInput.SelectedIndex = 0;
+                DeathDateDayInput.SelectedIndex = 0;
+                PersonDeathPlaceCombobox.SelectedIndex = 0;
+                PersonOccupationEntry.Clear();
+                PersonNotesEntry.Clear();
+                return;
+            }
+
+            PersonSurnameEntry.Text = person.surname ?? "";
+            PersonMaidenSurnameEntry.Text = person.maiden_surname ?? "";
+            PersonForenameEntry.Text = person.forename ?? "";
+            PersonMaidenForenameEntry.Text = person.maiden_forename ?? "";
+            GenderCombobox.SelectedIndex = person.GenderToIndex();
+            BirthDateYearInput.Text = person.birth_year.ToString() ?? "";
+            BirthDateMonthInput.SelectedIndex = (int)(person.birth_month ?? 0);
+            BirthDateDayInput.SelectedIndex = (int)(person.birth_day ?? 0);
+
+            if (person.birthPlace != null)
+                PersonBirthPlaceCombobox.SelectedIndex = settlements
+                    .Select((v, i) => new { sett = v, index = i })
+                    .FirstOrDefault(x => x.sett.id == person.birthPlace)?.index ?? -1; // FIXME: Ismeretlen opció
+            DeathDateYearInput.Clear();
+            DeathDateMonthInput.SelectedIndex = 0;
+            DeathDateDayInput.SelectedIndex = 0;
+            if (person.birthPlace != null)
+                PersonDeathPlaceCombobox.SelectedIndex = settlements
+                    .Select((v, i) => new { sett = v, index = i })
+                    .FirstOrDefault(x => x.sett.id == person.deathPlace)?.index ?? -1; // FIXME: Ismeretlen opció
+            PersonOccupationEntry.Text = person.occupation ?? "";
+            PersonNotesEntry.Text = person.notes ?? "";
         }
     }
 }

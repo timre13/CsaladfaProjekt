@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Data.SqlTypes;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -71,6 +72,18 @@ namespace DB
                 _ => "Egyéb",
             };
         }
+
+        public int GenderToIndex()
+        {
+            if (gender == null)
+                return 0;
+            return gender switch
+            {
+                'M' => 1,
+                'F' => 2,
+                _ => 3,
+            };
+        }
         
         public Person[] sibblings()
         {
@@ -93,6 +106,14 @@ namespace DB
         }
 
 
+    }
+
+    public class Settlement
+    {
+        public int id = -1;
+        public string? name = "";
+        public string? provinceName = "";
+        public string? countryName = "";
     }
 
     public class TXT
@@ -244,6 +265,47 @@ namespace DB
 
             return people.ToArray();
 
+        }
+
+        public static long? ToLongOrNull(in string? value)
+        {
+            if (value == null)
+                return null;
+            return long.Parse(value);
+        }
+
+        public static Settlement GetSettlement(int id)
+        {
+            Settlement settl = new Settlement();
+            var settlementReader = ExecReaderCmd($"SELECT settlement, provinceID FROM settlement WHERE id = { id }");
+            settlementReader.Read();
+            settl.name = GetValOrNull<string>(settlementReader, 0);
+            long? provId = GetValOrNull<long>(settlementReader, 1);
+            if (provId != null)
+            {
+                var provReader = ExecReaderCmd($"SELECT province, countryID FROM province WHERE id = { provId }");
+                provReader.Read();
+                settl.provinceName = GetValOrNull<string>(provReader, 0);
+                long? countryId = ToLongOrNull(GetValOrNull<string>(provReader, 1)); // FIXME: Ez (countryID) valamiért TEXT az adatbázisban
+                if (countryId != null)
+                {
+                    var countryReader = ExecReaderCmd($"SELECT country FROM country WHERE id = { countryId }");
+                    countryReader.Read();
+                    settl.countryName = GetValOrNull<string>(countryReader, 0);
+                }
+            }
+            return settl;
+        }
+
+        public static Settlement[] GetAllSettlements()
+        {
+            List<int> ids = new List<int>();
+            var reader = ExecReaderCmd("SELECT id FROM settlement");
+            while (reader.Read())
+            {
+                ids.Add(reader.GetInt32(0));
+            }
+            return ids.Select(x => GetSettlement(x)).ToArray();
         }
 
         public static void Close()

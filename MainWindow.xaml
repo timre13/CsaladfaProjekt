@@ -20,7 +20,7 @@
             MouseLeftButtonDown="canvas_MouseLeftButtonDown"
             MouseLeftButtonUp="canvas_MouseLeftButtonUp"
             MouseMove="canvas_MouseMove" Grid.Column="1"/>
-        <ListView x:Name="PersonList" Grid.Column="0">
+        <ListView x:Name="PersonList" SelectionChanged="PersonList_SelectionChanged" SelectionMode="Single" Grid.Column="0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Vezetéknév" Width="100" DisplayMemberBinding="{Binding surnameDisp}"/>
@@ -84,13 +84,7 @@
                 </Grid>
 
                 <Label Content="Születési Hely:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="6" Grid.Column="0"/>
-                <ComboBox x:Name="PersonBirthPlaceCombobox" SelectedIndex="0" Width="200" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="6" Grid.Column="1">
-                    <ComboBoxItem Content="(Ismeretlen)" Foreground="Gray"/>
-                    <ComboBoxItem Content="Aasdfasdf"/>
-                    <ComboBoxItem Content="Foijweofiajwef"/>
-                    <ComboBoxItem Content="Iaweofiajwef"/>
-                    <ComboBoxItem Content="Oqwaeawefawef"/>
-                </ComboBox>
+                <ComboBox x:Name="PersonBirthPlaceCombobox" SelectedIndex="0" Width="200" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="6" Grid.Column="1"/>
 
                 <Label Content="Halál Ideje:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="7" Grid.Column="0"/>
                 <Grid Width="200" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="7" Grid.Column="1">
