@@ -114,6 +114,13 @@ namespace DB
         public string? name = "";
         public string? provinceName = "";
         public string? countryName = "";
+
+        public string DisplayName { get
+            {
+                if (id == -1)
+                    return "(Ismeretlen)";
+                return $"{countryName ?? "-"}, {provinceName ?? "-"}, {name ?? "-"}";
+            } }
     }
 
     public class TXT
@@ -267,7 +274,7 @@ namespace DB
 
         }
 
-        public static long? ToLongOrNull(in string? value)
+        private static long? ToLongOrNull(in string? value)
         {
             if (value == null)
                 return null;
@@ -277,6 +284,7 @@ namespace DB
         public static Settlement GetSettlement(int id)
         {
             Settlement settl = new Settlement();
+            settl.id = id;
             var settlementReader = ExecReaderCmd($"SELECT settlement, provinceID FROM settlement WHERE id = { id }");
             settlementReader.Read();
             settl.name = GetValOrNull<string>(settlementReader, 0);

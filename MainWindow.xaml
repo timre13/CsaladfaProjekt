@@ -32,7 +32,7 @@
             </ListView.View>
         </ListView>
         <Grid Grid.Column="2" Background="White">
-            <Grid Margin="10,10,10,10">
+            <Grid Margin="10,10,10,10" x:Name="PersonInfoGrid">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -84,7 +84,7 @@
                 </Grid>
 
                 <Label Content="Születési Hely:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="6" Grid.Column="0"/>
-                <ComboBox x:Name="PersonBirthPlaceCombobox" SelectedIndex="0" Width="200" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="6" Grid.Column="1"/>
+                <ComboBox x:Name="PersonBirthPlaceCombobox" SelectedIndex="0" DisplayMemberPath="DisplayName" Width="200" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="6" Grid.Column="1"/>
 
                 <Label Content="Halál Ideje:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="7" Grid.Column="0"/>
                 <Grid Width="200" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="7" Grid.Column="1">
@@ -99,7 +99,7 @@
                 </Grid>
 
                 <Label Content="Halál Helye:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="8" Grid.Column="0"/>
-                <ComboBox x:Name="PersonDeathPlaceCombobox" SelectedIndex="0" Width="200" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="8" Grid.Column="1"/>
+                <ComboBox x:Name="PersonDeathPlaceCombobox" SelectedIndex="0" DisplayMemberPath="DisplayName" Width="200" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="8" Grid.Column="1"/>
 
                 <Label Content="Foglalkozás:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="9" Grid.Column="0"/>
                 <TextBox x:Name="PersonOccupationEntry" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="9" Grid.Column="1"/>
