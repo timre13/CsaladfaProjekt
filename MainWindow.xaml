@@ -16,9 +16,10 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="320"/>
+            <ColumnDefinition Width="30"/>
         </Grid.ColumnDefinitions>
-        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
             <MenuItem Header="Új...">
                 <MenuItem x:Name="NewPersonMenuItem" Header="Új Személy" Click="NewPersonMenuItem_Click"/>
                 <Separator/>
@@ -44,7 +45,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Grid Grid.Row="1" Grid.Column="2" Background="White">
+        <Grid Grid.Row="1" Grid.Column="2" Background="White" Grid.ColumnSpan="2">
             <Grid Margin="10,10,10,10" x:Name="PersonInfoGrid">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -62,6 +63,7 @@
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <Label Content="Keresztnév:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
@@ -119,6 +121,8 @@
 
                 <Label Content="Megjegyzés:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="10" Grid.Column="0"/>
                 <TextBox x:Name="PersonNotesEntry" TextWrapping="Wrap" AcceptsReturn="True" SpellCheck.IsEnabled="True" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" MinHeight="400" Height="Auto" Grid.Row="10" Grid.Column="1"/>
+
+                <Button x:Name="PersonInfoSaveButton" Content="Mentés" Padding="5" Foreground="Green" FontWeight="Bold" Click="PersonInfoSaveButton_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2"/>
             </Grid>
         </Grid>
     </Grid>

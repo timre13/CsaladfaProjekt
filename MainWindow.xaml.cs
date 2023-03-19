@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -300,6 +301,59 @@ namespace Csaladfa
             }
 
             SetSelectedPerson(_selectedPersonId);
+        }
+
+        private static string? EmptyToNull(in string value)
+        {
+            return value == null ? null : value;
+        }
+
+        public static char? IndexToGender(int index)
+        {
+            return index switch
+            {
+                1 => 'M',
+                2 => 'F',
+                3 => 'X',
+                _ => null,
+            };
+        }
+
+        private void PersonInfoSaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            int personId = (PersonList.SelectedItem as dynamic).id;
+
+            DB.Person person = new Person();
+            person.id = personId;
+            //person.parents = ;
+            person.surname = EmptyToNull(PersonSurnameEntry.Text);
+            person.forename = EmptyToNull(PersonForenameEntry.Text);
+            person.maiden_surname = EmptyToNull(PersonMaidenSurnameEntry.Text);
+            person.maiden_forename = EmptyToNull(PersonMaidenForenameEntry.Text);
+            person.gender = IndexToGender(GenderCombobox.SelectedIndex); // FIXME
+
+            person.birthPlace = (PersonBirthPlaceCombobox.SelectedItem as Settlement)!.id == -1 ? null : (PersonBirthPlaceCombobox.SelectedItem as Settlement)!.id;
+            person.birth_year = BirthDateYearInput.Text == "" ? null : int.Parse(BirthDateYearInput.Text);
+            person.birth_month = BirthDateMonthInput.SelectedIndex == 0 ? null : BirthDateMonthInput.SelectedIndex;
+            person.birth_day = BirthDateDayInput.SelectedIndex == 0 ? null : BirthDateDayInput.SelectedIndex;
+
+            person.deathPlace = (PersonDeathPlaceCombobox.SelectedItem as Settlement)!.id == -1 ? null : (PersonDeathPlaceCombobox.SelectedItem as Settlement)!.id;
+            person.death_year = DeathDateYearInput.Text == "" ? null : int.Parse(DeathDateYearInput.Text);
+            person.death_month = DeathDateMonthInput.SelectedIndex == 0 ? null : DeathDateMonthInput.SelectedIndex;
+            person.death_day = DeathDateDayInput.SelectedIndex == 0 ? null : DeathDateDayInput.SelectedIndex;
+            //person.death_cause - TODO
+
+            person.occupation = EmptyToNull(PersonOccupationEntry.Text);
+            person.notes = EmptyToNull(PersonNotesEntry.Text);
+
+            DB.DB.UpdatePerson(person);
+            UpdatePersonList();
+            PersonList.SelectedIndex = _personListItems
+                .Select((v, i) => new { value = v, index = i })
+                .Where(x => x.value.id == personId)
+                .First().index;
+            PersonList.ScrollIntoView(PersonList.SelectedItem);
+            SetSelectedPerson(person.id);
         }
     }
 }
