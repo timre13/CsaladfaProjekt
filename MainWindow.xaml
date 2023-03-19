@@ -9,18 +9,31 @@
         Title="MainWindow" Height="800" Width="1500"
         Closing="Window_Closing">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="350"/>
         </Grid.ColumnDefinitions>
+        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+            <MenuItem Header="Új...">
+                <MenuItem x:Name="NewPersonMenuItem" Header="Új Személy" Click="NewPersonMenuItem_Click"/>
+                <Separator/>
+                <MenuItem x:Name="NewCountryMenuItem" Header="Új Ország" Click="NewCountryMenuItem_Click"/>
+                <MenuItem x:Name="NewProvinceMenuItem" Header="Új Megye" Click="NewProvinceMenuItem_Click"/>
+                <MenuItem x:Name="NewSettlementMenuItem" Header="Új Település" Click="NewSettlementMenuItem_Click"/>
+            </MenuItem>
+        </Menu>
         <Canvas
             Background="#FFA0A0A0"
             x:Name="canvas"
             MouseLeftButtonDown="canvas_MouseLeftButtonDown"
             MouseLeftButtonUp="canvas_MouseLeftButtonUp"
-            MouseMove="canvas_MouseMove" Grid.Column="1"/>
-        <ListView x:Name="PersonList" SelectionChanged="PersonList_SelectionChanged" SelectionMode="Single" Grid.Column="0">
+            MouseMove="canvas_MouseMove" Grid.Row="1" Grid.Column="1"/>
+        <ListView x:Name="PersonList" SelectionChanged="PersonList_SelectionChanged" SelectionMode="Single" Grid.Row="1" Grid.Column="0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Vezetéknév" Width="100" DisplayMemberBinding="{Binding surnameDisp}"/>
@@ -31,7 +44,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Grid Grid.Column="2" Background="White">
+        <Grid Grid.Row="1" Grid.Column="2" Background="White">
             <Grid Margin="10,10,10,10" x:Name="PersonInfoGrid">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -50,7 +63,7 @@
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                
+
                 <Label Content="Keresztnév:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
                 <TextBox x:Name="PersonSurnameEntry" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="0" Grid.Column="1"/>
 

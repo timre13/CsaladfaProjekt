@@ -235,5 +235,41 @@ namespace Csaladfa
             PersonOccupationEntry.Text = person.occupation ?? "";
             PersonNotesEntry.Text = person.notes ?? "";
         }
+
+        private void NewPersonMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void NewCountryMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new TextDialog("Ország neve:");
+            dlg.Owner = this;
+            var result = dlg.ShowDialog();
+            if (result.GetValueOrDefault() == true)
+            {
+                Debug.WriteLine($"Adding country: { dlg.GetText() }");
+                DB.DB.AddCountry(dlg.GetText());
+            }
+        }
+
+        private void NewProvinceMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var countries = DB.DB.GetAllCountries().Select(x => new TextAndItemDialog.Item(x.id, x.name)).ToList();
+
+            var dlg = new TextAndItemDialog("Megye neve:", "Ország:", countries);
+            dlg.Owner = this;
+            var result = dlg.ShowDialog();
+            if (result.GetValueOrDefault() == true)
+            {
+                Debug.WriteLine($"Adding province '{ dlg.GetText() }' to country (id='{ dlg.GetItemId() }', name='{dlg.GetItemName()}')");
+                DB.DB.AddProvince(dlg.GetText(), dlg.GetItemId());
+            }
+        }
+
+        private void NewSettlementMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

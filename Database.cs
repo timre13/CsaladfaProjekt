@@ -164,7 +164,9 @@ namespace DB
             using (SQLiteCommand cmd = _conn.CreateCommand())
             {
                 cmd.CommandText = command;
-                return cmd.ExecuteNonQuery();
+                int count = cmd.ExecuteNonQuery();
+                Debug.WriteLine($"Modified {count} rows");
+                return count;
             }
         }
 
@@ -314,6 +316,39 @@ namespace DB
                 ids.Add(reader.GetInt32(0));
             }
             return ids.Select(x => GetSettlement(x)).ToArray();
+        }
+
+        public static void AddCountry(in string name)
+        {
+            ExecWriterCmd($"INSERT INTO country (country) VALUES ('{name}')");
+        }
+
+        public class Country
+        {
+            public int id = -1;
+            public string name = "";
+
+            public Country(int id, in string name)
+            {
+                this.id = id;
+                this.name = name;
+            }
+        }
+
+        public static Country[] GetAllCountries()
+        {
+            List<Country> outputs = new List<Country>();
+            var reader = ExecReaderCmd("SELECT id, country FROM country");
+            while (reader.Read())
+            {
+                outputs.Add(new Country(reader.GetInt32(0), GetValOrNull<string>(reader, 1) ?? "???"));
+            }
+            return outputs.ToArray();
+        }
+
+        public static void AddProvince(in string name, int countryId)
+        {
+            ExecWriterCmd($"INSERT INTO province (province, countryID) VALUES ('{name}', {countryId})");
         }
 
         public static void Close()
