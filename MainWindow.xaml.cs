@@ -28,6 +28,7 @@ namespace Csaladfa
         static public double CanvasPanY = -500/2+PERSON_RECT_H/2;
         private Point _prevCursPos = new Point();
         private bool _isMouseDown = false;
+        private int _selectedPersonId = -1;
 
         public void Draw(Canvas canvas, Person pers, int x, int y)
         {
@@ -175,6 +176,8 @@ namespace Csaladfa
 
         private void SetSelectedPerson(int id)
         {
+            _selectedPersonId = id;
+
             List<Settlement> settlements = new List<Settlement> { new Settlement() };
             settlements.AddRange(DB.DB.GetAllSettlements());
             PersonBirthPlaceCombobox.ItemsSource = settlements;
@@ -251,6 +254,8 @@ namespace Csaladfa
                 Debug.WriteLine($"Adding country: { dlg.GetText() }");
                 DB.DB.AddCountry(dlg.GetText());
             }
+
+            SetSelectedPerson(_selectedPersonId);
         }
 
         private void NewProvinceMenuItem_Click(object sender, RoutedEventArgs e)
@@ -264,6 +269,8 @@ namespace Csaladfa
                 Debug.WriteLine($"Adding province '{ dlg.GetText() }' to country (id='{ dlg.GetItemId() }', name='{dlg.GetItemName()}')");
                 DB.DB.AddProvince(dlg.GetText(), dlg.GetItemId());
             }
+
+            SetSelectedPerson(_selectedPersonId);
         }
 
         private void NewSettlementMenuItem_Click(object sender, RoutedEventArgs e)
@@ -277,6 +284,8 @@ namespace Csaladfa
                 Debug.WriteLine($"Adding settlement '{dlg.GetText()}' to province (id='{dlg.GetItemId()}', name='{dlg.GetItemName()}')");
                 DB.DB.AddSettlement(dlg.GetText(), dlg.GetItemId());
             }
+
+            SetSelectedPerson(_selectedPersonId);
         }
     }
 }
