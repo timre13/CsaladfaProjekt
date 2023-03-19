@@ -231,7 +231,7 @@ namespace DB
 
         }
 
-
+        /*
         public static void addPerson(Person p)
         {
             ExecWriterCmd($"INSERT INTO table ({TXT.person_cols})\r\n" +
@@ -240,7 +240,33 @@ namespace DB
                           $"{p.birth_year}, {p.birth_month}, {p.birth_day}, {p.death_year}, " +
                           $"{p.death_month}, {p.death_day}, {p.death_cause}, {p.occupation}, {p.notes});");
         }
+        */
 
+        public static string StringToSql(in string? input)
+        {
+            return input == null ? "NULL" : "'" + input + "'";
+        }
+
+        public static string CharToSql(in char? input)
+        {
+            return input == null ? "NULL" : "'" + input + "'";
+        }
+
+        public static string LongToSql(in long? input)
+        {
+            return input == null ? "NULL" : input!.ToString();
+        }
+
+        public static void UpdatePerson(Person person)
+        {
+            ExecWriterCmd($"UPDATE person SET parentsID = {LongToSql(person.parents)}," +
+                $"surname = {StringToSql(person.surname)}, forename = {StringToSql(person.forename)}, " +
+                $"maiden_surname = {StringToSql(person.maiden_surname)}, maiden_forename = {StringToSql(person.maiden_forename)}, gender = {CharToSql(person.gender)}, " +
+                $"birthPlace = {LongToSql(person.birthPlace)}, deathPlace = {LongToSql(person.deathPlace)}, birth_year = {LongToSql(person.birth_year)}, " +
+                $"birth_month = {LongToSql(person.birth_month)}, birth_day = {LongToSql(person.birth_day)}, death_year = {LongToSql(person.death_year)}, " +
+                $"death_month = {LongToSql(person.death_month)}, death_day = {LongToSql(person.death_day)}, death_cause = {StringToSql(person.death_cause)}, " +
+                $"occupation = {StringToSql(person.occupation)}, notes = {StringToSql(person.notes)} WHERE id = {person.id}");
+        }
 
         public static Person getPerson(int id)
         {
