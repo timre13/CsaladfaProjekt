@@ -6,6 +6,7 @@ using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection.PortableExecutable;
+using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 
@@ -349,6 +350,42 @@ namespace DB
         public static void AddProvince(in string name, int countryId)
         {
             ExecWriterCmd($"INSERT INTO province (province, countryID) VALUES ('{name}', {countryId})");
+        }
+
+        public class Province
+        {
+            public int id = -1;
+            public string name = "";
+            public string countryName = "";
+
+            string DisplayName { get => $"{name}, {countryName}"; }
+
+            public Province(int id, string name, string countryName)
+            {
+                this.id = id;
+                this.name = name;
+                this.countryName = countryName;
+            }
+        }
+
+        public static Province[] GetAllProvinces()
+        {
+            var reader = ExecReaderCmd(
+                $"SELECT province.id, province.province, country.country " +
+                $"FROM province LEFT JOIN country ON province.countryID = country.id;");
+
+            var output = new List<Province>();
+            while (reader.Read())
+            {
+                var prov = new Province(reader.GetInt32(0), GetValOrNull<string>(reader, 1) ?? "???", GetValOrNull<string>(reader, 2) ?? "???");
+                output.Add(prov);
+            }
+            return output.ToArray();
+        }
+
+        public static void AddSettlement(in string name, int provinceName)
+        {
+            ExecWriterCmd($"INSERT INTO settlement (settlement, provinceID) VALUES ('{name}', {provinceName})");
         }
 
         public static void Close()

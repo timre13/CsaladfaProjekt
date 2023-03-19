@@ -259,8 +259,7 @@ namespace Csaladfa
 
             var dlg = new TextAndItemDialog("Megye neve:", "Ország:", countries);
             dlg.Owner = this;
-            var result = dlg.ShowDialog();
-            if (result.GetValueOrDefault() == true)
+            if (dlg.ShowDialog().GetValueOrDefault() == true)
             {
                 Debug.WriteLine($"Adding province '{ dlg.GetText() }' to country (id='{ dlg.GetItemId() }', name='{dlg.GetItemName()}')");
                 DB.DB.AddProvince(dlg.GetText(), dlg.GetItemId());
@@ -269,7 +268,15 @@ namespace Csaladfa
 
         private void NewSettlementMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            var provinces = DB.DB.GetAllProvinces().Select(x => new TextAndItemDialog.Item(x.id, x.name+", "+x.countryName)).ToList();
 
+            var dlg = new TextAndItemDialog("Település neve:", "Megye:", provinces);
+            dlg.Owner = this;
+            if (dlg.ShowDialog().GetValueOrDefault() == true)
+            {
+                Debug.WriteLine($"Adding settlement '{dlg.GetText()}' to province (id='{dlg.GetItemId()}', name='{dlg.GetItemName()}')");
+                DB.DB.AddSettlement(dlg.GetText(), dlg.GetItemId());
+            }
         }
     }
 }
