@@ -28,7 +28,9 @@ namespace Csaladfa
         static public double CanvasPanY = -500/2+PERSON_RECT_H/2;
         private Point _prevCursPos = new Point();
         private bool _isMouseDown = false;
+
         private int _selectedPersonId = -1;
+        private List<dynamic> _personListItems = new List<dynamic>();
 
         public void Draw(Canvas canvas, Person pers, int x, int y)
         {
@@ -123,9 +125,11 @@ namespace Csaladfa
         {
             var people = DB.DB.getAllPeople();
             PersonList.Items.Clear();
+            _personListItems.Clear();
             foreach (var p in people)
             {
-                PersonList.Items.Add(new {
+                var person = new
+                {
                     id = p.id,
                     forename = p.forename,
                     forenameDisp = p.forename ?? "???",
@@ -149,9 +153,11 @@ namespace Csaladfa
                     deathCause = p.death_cause,
                     occupation = p.occupation,
                     notes = p.notes,
-                }); ;
+                };
+                PersonList.Items.Add(person);
+                _personListItems.Add(person);
             }
-            Debug.WriteLine("Person list: "+PersonList.Items.Count);
+            Debug.WriteLine("Person count: "+PersonList.Items.Count);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -241,7 +247,15 @@ namespace Csaladfa
 
         private void NewPersonMenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            var id = DB.DB.AddPerson();
+            Debug.WriteLine($"Added new person with id {id}");
+            UpdatePersonList();
+            PersonList.SelectedIndex = _personListItems
+                .Select((v, i) => new { value = v, index = i })
+                .Where(x => x.value.id == id)
+                .First().index;
+            PersonList.ScrollIntoView(PersonList.SelectedItem);
+            SetSelectedPerson(id);
         }
 
         private void NewCountryMenuItem_Click(object sender, RoutedEventArgs e)

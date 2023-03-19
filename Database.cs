@@ -388,6 +388,14 @@ namespace DB
             ExecWriterCmd($"INSERT INTO settlement (settlement, provinceID) VALUES ('{name}', {provinceName})");
         }
 
+        public static int AddPerson()
+        {
+            ExecWriterCmd("INSERT INTO person (forename) VALUES (NULL)");
+            var reader = ExecReaderCmd("SELECT MAX(id) from person;");
+            reader.Read();
+            return reader.GetInt32(0);
+        }
+
         public static void Close()
         {
             _conn.Close();
