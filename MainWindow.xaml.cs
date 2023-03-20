@@ -228,7 +228,7 @@ namespace Csaladfa
             PersonForenameEntry.Text = person.forename ?? "";
             PersonMaidenForenameEntry.Text = person.maiden_forename ?? "";
             GenderCombobox.SelectedIndex = person.GenderToIndex();
-            BirthDateYearInput.Text = person.birth_year.ToString() ?? "";
+            BirthDateYearInput.Text = person.birth_year?.ToString() ?? "";
             BirthDateMonthInput.SelectedIndex = (int)(person.birth_month ?? 0);
             BirthDateDayInput.SelectedIndex = (int)(person.birth_day ?? 0);
 
@@ -236,9 +236,9 @@ namespace Csaladfa
                 PersonBirthPlaceCombobox.SelectedIndex = settlements
                     .Select((v, i) => new { sett = v, index = i })
                     .FirstOrDefault(x => x.sett.id == person.birthPlace)?.index ?? -1;
-            DeathDateYearInput.Clear();
-            DeathDateMonthInput.SelectedIndex = 0;
-            DeathDateDayInput.SelectedIndex = 0;
+            DeathDateYearInput.Text = person.death_year?.ToString() ?? "";
+            DeathDateMonthInput.SelectedIndex = (int)(person.death_month ?? 0);
+            DeathDateDayInput.SelectedIndex = (int)(person.death_day ?? 0);
             if (person.birthPlace != null)
                 PersonDeathPlaceCombobox.SelectedIndex = settlements
                     .Select((v, i) => new { sett = v, index = i })
