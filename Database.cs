@@ -97,11 +97,13 @@ namespace DB
 
             List<Person> sibblings = new List<Person>();
 
-
             while (reader.Read())
             {
                 sibblings.Add(DB.getPersonFromReader(reader));
             }
+
+            sibblings.Remove(this);
+
 
             return sibblings.ToArray();
         }
@@ -323,7 +325,7 @@ namespace DB
                 var provReader = ExecReaderCmd($"SELECT province, countryID FROM province WHERE id = { provId }");
                 provReader.Read();
                 settl.provinceName = GetValOrNull<string>(provReader, 0);
-                long? countryId = ToLongOrNull(GetValOrNull<string>(provReader, 1)); // FIXME: Ez (countryID) valamiért TEXT az adatbázisban
+                long? countryId = ToLongOrNull(GetValOrNull<string>(provReader, 1));
                 if (countryId != null)
                 {
                     var countryReader = ExecReaderCmd($"SELECT country FROM country WHERE id = { countryId }");
@@ -424,6 +426,11 @@ namespace DB
 
         public static void Close()
         {
+
+            Debug.WriteLine(getPerson(3).sibblings());
+
+
+
             _conn.Close();
             Debug.WriteLine("DB connection closed");
         }
