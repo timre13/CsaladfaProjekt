@@ -209,6 +209,7 @@ namespace Csaladfa
                 PersonDeathPlaceCombobox.SelectedIndex = 0;
                 PersonOccupationEntry.Clear();
                 PersonNotesEntry.Clear();
+                PersonSpouseCombobox.SelectedIndex = 0;
 
                 foreach (var child in PersonInfoGrid.Children)
                 {
@@ -222,6 +223,9 @@ namespace Csaladfa
             {
                 (child as dynamic).IsEnabled = true;
             }
+
+            List<Person> spouseListItems = new List<Person> { new Person() };
+            spouseListItems.AddRange(DB.DB.getAllPeople().Where(x => person.gender == null || x.gender == (person.gender == 'M' ? 'F' : 'M') || x.gender == null));
 
             PersonSurnameEntry.Text = person.surname ?? "";
             PersonMaidenSurnameEntry.Text = person.maiden_surname ?? "";
@@ -245,6 +249,11 @@ namespace Csaladfa
                     .FirstOrDefault(x => x.sett.id == person.deathPlace)?.index ?? -1;
             PersonOccupationEntry.Text = person.occupation ?? "";
             PersonNotesEntry.Text = person.notes ?? "";
+
+            PersonSpouseCombobox.ItemsSource = spouseListItems;
+            PersonSpouseCombobox.SelectedIndex = spouseListItems
+                .Select((v, i) => new {index=i, value=v})
+                .Where(x => x.value.id == person.GetSpouse()?.id).FirstOrDefault()?.index ?? 0;
         }
 
         private void NewPersonMenuItem_Click(object sender, RoutedEventArgs e)
