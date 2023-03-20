@@ -356,5 +356,15 @@ namespace Csaladfa
             PersonList.ScrollIntoView(PersonList.SelectedItem);
             SetSelectedPerson(person.id);
         }
+
+        private void PersonDeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine($"Deleting person: {PersonList.SelectedItem}");
+            DB.DB.DeletePerson((PersonList.SelectedItem as dynamic).id);
+
+            UpdatePersonList();
+            PersonList.UnselectAll();
+            SetSelectedPerson(-1);
+        }
     }
 }

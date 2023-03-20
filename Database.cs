@@ -418,6 +418,11 @@ namespace DB
             return reader.GetInt32(0);
         }
 
+        public static void DeletePerson(long id)
+        {
+            ExecWriterCmd($"DELETE FROM person WHERE id = {id}");
+        }
+
         public static void Close()
         {
 
