@@ -157,6 +157,7 @@ namespace DB
             using (SQLiteCommand cmd = _conn.CreateCommand())
             {
                 cmd.CommandText = command;
+                Debug.WriteLine("sikeres beolvasás");
                 return cmd.ExecuteReader();
             }
         }
