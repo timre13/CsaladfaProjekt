@@ -153,7 +153,7 @@ namespace DB
 
         public static SQLiteDataReader ExecReaderCmd(string command)
         {
-            Debug.WriteLine($"Executing reader command: \"{command}\"");
+            // Debug.WriteLine($"Executing reader command: \"{command}\"");
             using (SQLiteCommand cmd = _conn.CreateCommand())
             {
                 cmd.CommandText = command;
@@ -305,12 +305,6 @@ namespace DB
 
         }
 
-        private static long? ToLongOrNull(in string? value)
-        {
-            if (value == null)
-                return null;
-            return long.Parse(value);
-        }
 
         public static Settlement GetSettlement(int id)
         {
@@ -325,7 +319,7 @@ namespace DB
                 var provReader = ExecReaderCmd($"SELECT province, countryID FROM province WHERE id = { provId }");
                 provReader.Read();
                 settl.provinceName = GetValOrNull<string>(provReader, 0);
-                long? countryId = ToLongOrNull(GetValOrNull<string>(provReader, 1));
+                long? countryId = GetValOrNull<long>(provReader, 1);
                 if (countryId != null)
                 {
                     var countryReader = ExecReaderCmd($"SELECT country FROM country WHERE id = { countryId }");
@@ -426,10 +420,6 @@ namespace DB
 
         public static void Close()
         {
-
-            Debug.WriteLine(getPerson(3).sibblings());
-
-
 
             _conn.Close();
             Debug.WriteLine("DB connection closed");

@@ -35,6 +35,7 @@ namespace Csaladfa
 
         public void Draw(Canvas canvas, Person pers, int x, int y)
         {
+
             var rect = new Polygon();
             rect.Fill = pers.GenderToBrush();
             rect.Stroke = Brushes.Gray;
