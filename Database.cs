@@ -153,11 +153,10 @@ namespace DB
 
         public static SQLiteDataReader ExecReaderCmd(string command)
         {
-            // Debug.WriteLine($"Executing reader command: \"{command}\"");
+            Debug.WriteLine($"Executing reader command: \"{command}\"");
             using (SQLiteCommand cmd = _conn.CreateCommand())
             {
                 cmd.CommandText = command;
-                Debug.WriteLine("sikeres beolvasás");
                 return cmd.ExecuteReader();
             }
         }
@@ -257,7 +256,7 @@ namespace DB
 
         public static string LongToSql(in long? input)
         {
-            return input == null ? "NULL" : input!.ToString();
+            return input == null ? "NULL" : input.ToString();
         }
 
         public static void UpdatePerson(Person person)

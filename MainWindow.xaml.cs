@@ -331,14 +331,14 @@ namespace Csaladfa
             person.forename = EmptyToNull(PersonForenameEntry.Text);
             person.maiden_surname = EmptyToNull(PersonMaidenSurnameEntry.Text);
             person.maiden_forename = EmptyToNull(PersonMaidenForenameEntry.Text);
-            person.gender = IndexToGender(GenderCombobox.SelectedIndex); // FIXME
+            person.gender = IndexToGender(GenderCombobox.SelectedIndex);
 
-            person.birthPlace = (PersonBirthPlaceCombobox.SelectedItem as Settlement)!.id == -1 ? null : (PersonBirthPlaceCombobox.SelectedItem as Settlement)!.id;
+            person.birthPlace = ((PersonBirthPlaceCombobox.SelectedItem as Settlement)?.id ?? -1) == -1 ? null : (PersonBirthPlaceCombobox.SelectedItem as Settlement)!.id;
             person.birth_year = BirthDateYearInput.Text == "" ? null : int.Parse(BirthDateYearInput.Text);
             person.birth_month = BirthDateMonthInput.SelectedIndex == 0 ? null : BirthDateMonthInput.SelectedIndex;
             person.birth_day = BirthDateDayInput.SelectedIndex == 0 ? null : BirthDateDayInput.SelectedIndex;
 
-            person.deathPlace = (PersonDeathPlaceCombobox.SelectedItem as Settlement)!.id == -1 ? null : (PersonDeathPlaceCombobox.SelectedItem as Settlement)!.id;
+            person.deathPlace = ((PersonDeathPlaceCombobox.SelectedItem as Settlement)?.id ?? -1 ) == -1 ? null : (PersonDeathPlaceCombobox.SelectedItem as Settlement)!.id;
             person.death_year = DeathDateYearInput.Text == "" ? null : int.Parse(DeathDateYearInput.Text);
             person.death_month = DeathDateMonthInput.SelectedIndex == 0 ? null : DeathDateMonthInput.SelectedIndex;
             person.death_day = DeathDateDayInput.SelectedIndex == 0 ? null : DeathDateDayInput.SelectedIndex;
