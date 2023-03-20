@@ -85,29 +85,91 @@ namespace DB
                 _ => 3,
             };
         }
-        
+
         public Person[] sibblings()
         {
             if (this.parents == null)
                 return new Person[] { };
-
-            Relationship parents = DB.getRelationship(this.parents.Value);
-
-            var reader = DB.ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE parentsID = {this.parents}");
-
-            List<Person> sibblings = new List<Person>();
-
-            while (reader.Read())
+            else
             {
-                sibblings.Add(DB.getPersonFromReader(reader));
+                // Szülők megkeresése:
+                List<Relationship> parents = new List<Relationship>();
+                parents.Add(DB.getRelationship(this.parents));
+
+                var reader = DB.ExecReaderCmd($"SELECT {TXT.relationship_cols} FROM relationship " +
+                    $"WHERE husband = {parents[0].husband} AND wife = {parents[0].wife}");
+
+                while (reader.Read())
+                {
+                    parents.Add(DB.getRelationshipFromReader(reader));
+                }
+
+                string parentsQ = "";
+                foreach (var relationship in parents)
+                {
+                    parentsQ += relationship.id + ",";
+                }
+                parentsQ = parentsQ.Substring(0, parentsQ.Length - 1);
+
+
+                // Testvérek megkeresése:
+                reader = DB.ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE parentsID IN ({parentsQ})");
+                List<Person> sibblings = new List<Person>();
+
+                while (reader.Read())
+                {
+                    Person person = DB.getPersonFromReader(reader);
+
+                    if (person.id != this.id)
+                        sibblings.Add(person);
+                }
+
+                return sibblings.ToArray();
             }
 
-            sibblings.Remove(this);
-
-
-            return sibblings.ToArray();
         }
 
+        public Person[] halfSibblings()
+        {
+            if (this.parents == null)
+                return new Person[] { };
+            else
+            {
+                // Szülők megkeresése:
+                List<Relationship> parents = new List<Relationship>();
+                Relationship parents0 = DB.getRelationship(this.parents);
+
+                var reader = DB.ExecReaderCmd($"SELECT {TXT.relationship_cols} FROM relationship " +
+                    $"WHERE (husband = {parents0.husband} AND wife != {parents0.wife}) OR " +
+                    $"(husband != {parents0.husband} AND wife = {parents0.wife})");
+
+                while (reader.Read())
+                {
+                    parents.Add(DB.getRelationshipFromReader(reader));
+                }
+
+
+                string parentsQ = "";
+                foreach (var relationship in parents)
+                {
+                    parentsQ += relationship.id + ",";
+                }
+                if (parentsQ.Length >= 1)
+                    parentsQ = parentsQ.Substring(0, parentsQ.Length - 1);
+
+                // Testvérek megkeresése:   ↓ITT A HIBA (a szülők keresése működik, az fix)
+                reader = DB.ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE parentsID IN ({parentsQ})");
+                List<Person> sibblings = new List<Person>();
+
+                while (reader.Read())
+                {
+                    sibblings.Add(DB.getPersonFromReader(reader));
+                }
+
+                return sibblings.ToArray();
+            }
+
+        }
 
     }
 
@@ -157,7 +219,6 @@ namespace DB
             using (SQLiteCommand cmd = _conn.CreateCommand())
             {
                 cmd.CommandText = command;
-                Debug.WriteLine("sikeres beolvasás");
                 return cmd.ExecuteReader();
             }
         }
@@ -280,7 +341,7 @@ namespace DB
 
         }
 
-        public static Relationship getRelationship(long id)
+        public static Relationship getRelationship(long? id)
         {
             var reader = ExecReaderCmd($"SELECT {TXT.relationship_cols} FROM relationship WHERE id = {id}");
 

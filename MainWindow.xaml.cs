@@ -69,6 +69,14 @@ namespace Csaladfa
         {
             InitializeComponent();
 
+            DB.Person[] people = DB.DB.getPerson(27).halfSibblings();
+            Debug.WriteLine("Testvérek:");
+            foreach (var person in people)
+            {
+                Debug.WriteLine(person.id + " " + person.surname + " " + person.forename);
+            }
+
+
             var months = new List<string> { "???" };
             months.AddRange(Enumerable.Range(1, 12).Select(x => new DateTime(2000, x, 1).ToString("MMMM", CultureInfo.CreateSpecificCulture("hu"))));
             BirthDateMonthInput.ItemsSource = months;
