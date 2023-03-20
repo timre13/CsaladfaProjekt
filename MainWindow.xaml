@@ -63,6 +63,8 @@
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
@@ -120,9 +122,18 @@
                 <TextBox x:Name="PersonOccupationEntry" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="9" Grid.Column="1"/>
 
                 <Label Content="Megjegyzés:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="10" Grid.Column="0"/>
-                <TextBox x:Name="PersonNotesEntry" TextWrapping="Wrap" AcceptsReturn="True" SpellCheck.IsEnabled="True" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" MinHeight="400" Height="Auto" Grid.Row="10" Grid.Column="1"/>
+                <TextBox x:Name="PersonNotesEntry" TextWrapping="Wrap" AcceptsReturn="True" SpellCheck.IsEnabled="True" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Height="200" Grid.Row="10" Grid.Column="1"/>
 
-                <Button x:Name="PersonInfoSaveButton" Content="Mentés" Padding="5" Foreground="Green" FontWeight="Bold" Click="PersonInfoSaveButton_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2"/>
+                <!--
+                <Label Content="Szülők:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="11" Grid.Column="0"/>
+                <ComboBox x:Name="PersonParentsCombobox" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="11" Grid.Column="1"/>
+                -->
+                
+                <Label Content="Házastárs:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="11" Grid.Column="0"/>
+                <ComboBox x:Name="PersonSpouseCombobox" DisplayMemberPath="FormattedName" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="11" Grid.Column="1"/>
+
+                <Button x:Name="PersonInfoSaveButton" Content="Mentés" Padding="5" Foreground="Green" FontWeight="Bold" Click="PersonInfoSaveButton_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="13" Grid.Column="0"/>
+                <Button x:Name="PersonDeleteButton" Content="Törlés" Padding="5" Foreground="Red" Click="PersonDeleteButton_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="14" Grid.Column="1"/>
             </Grid>
         </Grid>
     </Grid>

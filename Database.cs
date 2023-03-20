@@ -25,7 +25,7 @@ namespace DB
 
     public class Person
     {
-        public int id;
+        public int id = -1;
         public long? parents;
         public string? surname, forename;
         public string? maiden_surname, maiden_forename;
@@ -44,6 +44,11 @@ namespace DB
         public Person()
         {
 
+        }
+
+        public string FormattedName
+        {
+            get => id == -1 ? "(Ismeretlen)" : $"{surname} {forename}";
         }
 
         public Brush GenderToBrush()
@@ -171,6 +176,22 @@ namespace DB
 
         }
 
+        public Person? GetSpouse()
+        {
+            var reader1 = DB.ExecReaderCmd($"SELECT id FROM relationship WHERE husband = {id} OR wife = {id}");
+            if (!reader1.HasRows) return null;
+            reader1.Read();
+            var relId = reader1.GetInt64(0);
+
+            var rel = DB.getRelationship(relId);
+            long? spouseId = (gender == 'M' ? rel.wife : rel.husband);
+            if (spouseId == null)
+                return null;
+
+            return DB.getPerson((int)spouseId);
+        }
+
+
     }
 
     public class Settlement
@@ -215,7 +236,7 @@ namespace DB
 
         public static SQLiteDataReader ExecReaderCmd(string command)
         {
-            // Debug.WriteLine($"Executing reader command: \"{command}\"");
+            Debug.WriteLine($"Executing reader command: \"{command}\"");
             using (SQLiteCommand cmd = _conn.CreateCommand())
             {
                 cmd.CommandText = command;
@@ -318,7 +339,7 @@ namespace DB
 
         public static string LongToSql(in long? input)
         {
-            return input == null ? "NULL" : input!.ToString();
+            return input == null ? "NULL" : input.ToString();
         }
 
         public static void UpdatePerson(Person person)
@@ -332,9 +353,12 @@ namespace DB
                 $"occupation = {StringToSql(person.occupation)}, notes = {StringToSql(person.notes)} WHERE id = {person.id}");
         }
 
-        public static Person getPerson(int id)
+        public static Person? getPerson(int id)
         {
             var reader = ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE id = {id}");
+
+            if (!reader.HasRows)
+                return null;
 
             reader.Read();
             return getPersonFromReader(reader);
@@ -478,6 +502,11 @@ namespace DB
             var reader = ExecReaderCmd("SELECT MAX(id) from person;");
             reader.Read();
             return reader.GetInt32(0);
+        }
+
+        public static void DeletePerson(long id)
+        {
+            ExecWriterCmd($"DELETE FROM person WHERE id = {id}");
         }
 
         public static void Close()
