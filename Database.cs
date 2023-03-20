@@ -157,6 +157,7 @@ namespace DB
             using (SQLiteCommand cmd = _conn.CreateCommand())
             {
                 cmd.CommandText = command;
+                Debug.WriteLine("sikeres beolvasás");
                 return cmd.ExecuteReader();
             }
         }
@@ -305,12 +306,6 @@ namespace DB
 
         }
 
-        private static long? ToLongOrNull(in string? value)
-        {
-            if (value == null)
-                return null;
-            return long.Parse(value);
-        }
 
         public static Settlement GetSettlement(int id)
         {
@@ -325,7 +320,7 @@ namespace DB
                 var provReader = ExecReaderCmd($"SELECT province, countryID FROM province WHERE id = { provId }");
                 provReader.Read();
                 settl.provinceName = GetValOrNull<string>(provReader, 0);
-                long? countryId = ToLongOrNull(GetValOrNull<string>(provReader, 1));
+                long? countryId = GetValOrNull<long>(provReader, 1);
                 if (countryId != null)
                 {
                     var countryReader = ExecReaderCmd($"SELECT country FROM country WHERE id = { countryId }");
