@@ -365,7 +365,11 @@ namespace Csaladfa
             person.occupation = EmptyToNull(PersonOccupationEntry.Text);
             person.notes = EmptyToNull(PersonNotesEntry.Text);
 
+
             DB.DB.UpdatePerson(person);
+            person.DeleteRelationships();
+            if (PersonSpouseCombobox.SelectedIndex != 0)
+                person.SetSpouse((PersonSpouseCombobox.SelectedValue as Person).id);
             UpdatePersonList();
             PersonList.SelectedIndex = _personListItems
                 .Select((v, i) => new { value = v, index = i })

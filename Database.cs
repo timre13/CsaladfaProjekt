@@ -6,6 +6,7 @@ using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection.PortableExecutable;
+using System.Transactions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -191,7 +192,35 @@ namespace DB
             return DB.getPerson((int)spouseId);
         }
 
+        public void SetSpouse(int sid)
+        {
+            Debug.WriteLine($"Setting spouse of {id} to {sid}");
 
+            //var reader1 = DB.ExecReaderCmd($"SELECT id FROM relationship WHERE husband = {id} OR wife = {id}");
+            //if (!reader1.HasRows) return;
+            //reader1.Read();
+            //var relId = reader1.GetInt64(0);
+            //var rel = DB.getRelationship(relId);
+
+            var rel = new Relationship();
+            rel.legal = true;
+            if (gender == 'M')
+            {
+                rel.husband = id;
+                rel.wife = sid;
+            }
+            else
+            {
+                rel.wife = id;
+                rel.husband = sid;
+            }
+            DB.AddRelationship((long)rel.husband, (long)rel.wife);
+        }
+
+        public void DeleteRelationships()
+        {
+            DB.ExecWriterCmd($"DELETE FROM relationship WHERE husband={id} OR wife={id}");
+        }
     }
 
     public class Settlement
@@ -236,7 +265,7 @@ namespace DB
 
         public static SQLiteDataReader ExecReaderCmd(string command)
         {
-            Debug.WriteLine($"Executing reader command: \"{command}\"");
+            //Debug.WriteLine($"Executing reader command: \"{command}\"");
             using (SQLiteCommand cmd = _conn.CreateCommand())
             {
                 cmd.CommandText = command;
@@ -374,6 +403,23 @@ namespace DB
 
         }
 
+        /*
+        public static void UpdateRelationship(in Relationship rel)
+        {
+            //ExecWriterCmd($"DELETE FROM relationship WHERE husband={rel.husband} OR wife={rel.wife}");
+
+            /*var modified = ExecWriterCmd($"UPDATE relationship SET husband={rel.husband}, wife={rel.wife} WHERE id={rel.id}");
+            if (modified == 0)
+            {
+            ExecWriterCmd($"INSERT INTO relationship (id, husband, wife, legal) VALUES ({rel.id}, {rel.husband}, {rel.wife}, TRUE)");
+            //}
+        }
+        */
+
+        public static void AddRelationship(long husband, long wife)
+        {
+            ExecWriterCmd($"INSERT INTO relationship (husband, wife, legal) VALUES ({husband}, {wife}, TRUE)");
+        }
 
         public static Person[] getAllPeople()
         {
