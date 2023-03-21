@@ -79,7 +79,7 @@ Teszt-Adatbázis:
 1-70 - Az alap család
 71-108 - A beházasodott személyek szülei
 109-147 - A beházasodott személyek testvérei
-
+148-151 - Mikszáth Kálmán dédszülei
 
 
 

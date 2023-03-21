@@ -69,12 +69,14 @@ namespace Csaladfa
         {
             InitializeComponent();
 
-            DB.Person[] people = DB.DB.getPerson(27).halfSibblings();
-            Debug.WriteLine("Testvérek:");
+            /*
+            DB.Person[] people = DB.DB.getPerson(17).getGreatGrandParents();
+            Debug.WriteLine("Nagyszülők:");
             foreach (var person in people)
             {
-                Debug.WriteLine(person.id + " " + person.surname + " " + person.forename);
-            }
+                if (person != null)
+                    Debug.WriteLine(person.id + " " + person.surname + " " + person.forename);
+            }*/
 
 
             var months = new List<string> { "???" };
