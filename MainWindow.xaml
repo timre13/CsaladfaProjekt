@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Csaladfa"
         x:Class="Csaladfa.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1500"
+        Title="MainWindow" Height="800" Width="780"
         Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
@@ -14,8 +14,9 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="400"/>
+            <!--<ColumnDefinition Width="*"/>-->
+            <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="320"/>
             <ColumnDefinition Width="30"/>
         </Grid.ColumnDefinitions>
@@ -29,7 +30,7 @@
             </MenuItem>
         </Menu>
         <Canvas
-            Background="#FFA0A0A0"
+            Background="White"
             x:Name="canvas"
             MouseLeftButtonDown="canvas_MouseLeftButtonDown"
             MouseLeftButtonUp="canvas_MouseLeftButtonUp"
