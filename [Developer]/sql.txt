@@ -1,4 +1,4 @@
-
+ 
 CREATE TABLE relationship(
 	id INTEGER PRIMARY KEY NOT NULL,
 	husband INTEGER,

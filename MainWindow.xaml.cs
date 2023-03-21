@@ -35,7 +35,7 @@ namespace Csaladfa
 
         public void Draw(Canvas canvas, Person pers, int x, int y)
         {
-
+            /*
             var rect = new Polygon();
             rect.Fill = pers.GenderToBrush();
             rect.Stroke = Brushes.Gray;
@@ -63,6 +63,7 @@ namespace Csaladfa
             Canvas.SetLeft(dateText, x - CanvasPanX + 10);
             Canvas.SetTop(dateText, y - CanvasPanY + 30);
             canvas.Children.Add(dateText);
+            */
         }
 
         public MainWindow()
@@ -366,7 +367,11 @@ namespace Csaladfa
             person.occupation = EmptyToNull(PersonOccupationEntry.Text);
             person.notes = EmptyToNull(PersonNotesEntry.Text);
 
+
             DB.DB.UpdatePerson(person);
+            person.DeleteRelationships();
+            if (PersonSpouseCombobox.SelectedIndex != 0)
+                person.SetSpouse((PersonSpouseCombobox.SelectedValue as Person).id);
             UpdatePersonList();
             PersonList.SelectedIndex = _personListItems
                 .Select((v, i) => new { value = v, index = i })
