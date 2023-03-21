@@ -92,7 +92,7 @@ namespace DB
             };
         }
 
-        public Person[] sibblings()
+        public Person[] getSibblings()
         {
             if (this.parents == null)
                 return new Person[] { };
@@ -135,7 +135,7 @@ namespace DB
 
         }
 
-        public Person[] halfSibblings()
+        public Person[] getHalfSibblings()
         {
             if (this.parents == null)
                 return new Person[] { };
@@ -154,7 +154,6 @@ namespace DB
                     parents.Add(DB.getRelationshipFromReader(reader));
                 }
 
-
                 string parentsQ = "";
                 foreach (var relationship in parents)
                 {
@@ -163,7 +162,8 @@ namespace DB
                 if (parentsQ.Length >= 1)
                     parentsQ = parentsQ.Substring(0, parentsQ.Length - 1);
 
-                // Testvérek megkeresése:   ↓ITT A HIBA (a szülők keresése működik, az fix)
+
+                // Testvérek megkeresése:
                 reader = DB.ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE parentsID IN ({parentsQ})");
                 List<Person> sibblings = new List<Person>();
 
@@ -176,6 +176,67 @@ namespace DB
             }
 
         }
+
+        public Person[] getParents()
+        {
+            if (this.parents == null || this.parents == 0)
+                return new Person[2];
+            else
+            {
+                Person[] parents = new Person[2];
+                Relationship rel = DB.getRelationship(this.parents);
+
+                var reader = DB.ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE id = {rel.husband}");
+                if (reader.Read())
+                    parents[0] = DB.getPersonFromReader(reader);
+
+                reader = DB.ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE id = {rel.wife}");
+                if (reader.Read())
+                    parents[1] = DB.getPersonFromReader(reader);
+
+                return parents;
+            }
+        }
+
+        public Person[] getGrandParents()
+        {
+
+            Person[] parents = this.getParents();
+            List<Person> grandparents = new List<Person>();
+
+            foreach (var parent in parents)
+            {
+                if (parent != null)
+                    foreach (var grandparent in parent.getParents())
+                    {
+                        if (grandparent != null)
+                            grandparents.Add(grandparent);
+                    } 
+            }
+
+            return grandparents.ToArray();
+
+        }
+
+        public Person[] getGreatGrandParents()
+        {
+
+            Person[] grandparents = this.getGrandParents();
+            List<Person> greatGrandparents = new List<Person>();
+
+            foreach (var gParent in grandparents)
+            {
+                foreach (var ggParent in gParent.getParents())
+                {
+                    if (ggParent != null)
+                        greatGrandparents.Add(ggParent);
+                }
+            }
+
+            return greatGrandparents.ToArray();
+
+        }
+
 
         public Person? GetSpouse()
         {
@@ -265,7 +326,7 @@ namespace DB
 
         public static SQLiteDataReader ExecReaderCmd(string command)
         {
-            //Debug.WriteLine($"Executing reader command: \"{command}\"");
+            // Debug.WriteLine($"Executing reader command: \"{command}\"");
             using (SQLiteCommand cmd = _conn.CreateCommand())
             {
                 cmd.CommandText = command;
@@ -323,6 +384,9 @@ namespace DB
             person.death_cause = GetValOrNull<string>(reader, i++);
             person.occupation = GetValOrNull<string>(reader, i++);
             person.notes = GetValOrNull<string>(reader, i++);
+
+            if (person.parents == 0)
+                person.parents = null;
 
             return person;
         }
