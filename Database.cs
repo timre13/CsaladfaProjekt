@@ -176,6 +176,35 @@ namespace DB
             }
 
         }
+        /*
+        public Person[] getParentsComplex(int generation)
+        {
+            List<Person> parents = new List<Person>();
+
+            for (int i = 0; i < generation; i++)
+            {
+                if (this.parents == null || this.parents == 0)
+                    return new List<Person>();
+                else
+                {
+                    Person[] parents = new Person[2];
+                    Relationship rel = DB.getRelationship(this.parents);
+
+                    var reader = DB.ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE id = {rel.husband}");
+                    if (reader.Read())
+                        parents[0] = DB.getPersonFromReader(reader);
+
+                    reader = DB.ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE id = {rel.wife}");
+                    if (reader.Read())
+                        parents[1] = DB.getPersonFromReader(reader);
+
+                    return parents;
+                }
+            }
+
+
+
+        }*/
 
         public Person[] getParents()
         {
