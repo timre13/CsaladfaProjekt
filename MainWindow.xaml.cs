@@ -70,14 +70,14 @@ namespace Csaladfa
         {
             InitializeComponent();
 
-            /*
-            DB.Person[] people = DB.DB.getPerson(17).getGreatGrandParents();
+            
+            DB.Person[] people = DB.DB.getPerson(17).getParentsComplex(3);
             Debug.WriteLine("Nagyszülők:");
             foreach (var person in people)
             {
                 if (person != null)
                     Debug.WriteLine(person.id + " " + person.surname + " " + person.forename);
-            }*/
+            }
 
 
             var months = new List<string> { "???" };
