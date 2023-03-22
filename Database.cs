@@ -176,35 +176,27 @@ namespace DB
             }
 
         }
-        /*
-        public Person[] getParentsComplex(int generation)
+        
+        public Person[] getParents(int generation)
         {
-            List<Person> parents = new List<Person>();
 
-            for (int i = 0; i < generation; i++)
+            Person[] parents = this.getParents();
+
+            for (int i = 0; i < generation-1; i++)
             {
-                if (this.parents == null || this.parents == 0)
-                    return new List<Person>();
-                else
+                List<Person> newGeneration = new List<Person>();
+
+                for (int j = 0; j < parents.Length; j++)
                 {
-                    Person[] parents = new Person[2];
-                    Relationship rel = DB.getRelationship(this.parents);
-
-                    var reader = DB.ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE id = {rel.husband}");
-                    if (reader.Read())
-                        parents[0] = DB.getPersonFromReader(reader);
-
-                    reader = DB.ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE id = {rel.wife}");
-                    if (reader.Read())
-                        parents[1] = DB.getPersonFromReader(reader);
-
-                    return parents;
+                    if (parents[j] != null) 
+                        newGeneration = DB.mergeList(newGeneration, parents[j].getParents() );
                 }
+
+                parents = newGeneration.ToArray();
             }
-
-
-
-        }*/
+            
+            return parents;
+        }
 
         public Person[] getParents()
         {
@@ -227,44 +219,8 @@ namespace DB
             }
         }
 
-        public Person[] getGrandParents()
-        {
-
-            Person[] parents = this.getParents();
-            List<Person> grandparents = new List<Person>();
-
-            foreach (var parent in parents)
-            {
-                if (parent != null)
-                    foreach (var grandparent in parent.getParents())
-                    {
-                        if (grandparent != null)
-                            grandparents.Add(grandparent);
-                    } 
-            }
-
-            return grandparents.ToArray();
-
-        }
-
-        public Person[] getGreatGrandParents()
-        {
-
-            Person[] grandparents = this.getGrandParents();
-            List<Person> greatGrandparents = new List<Person>();
-
-            foreach (var gParent in grandparents)
-            {
-                foreach (var ggParent in gParent.getParents())
-                {
-                    if (ggParent != null)
-                        greatGrandparents.Add(ggParent);
-                }
-            }
-
-            return greatGrandparents.ToArray();
-
-        }
+        
+        
 
 
         public Person? GetSpouse()
@@ -342,6 +298,25 @@ namespace DB
     public static class DB
     {
         public static SQLiteConnection _conn;
+
+        public static List<Person> mergeList(List<Person> list1, List<Person> list2)
+        {
+            for (int i = 0; i < list2.Count; i++)
+            {
+                if (list2[i] != null)
+                    list1.Add(list2[i]);
+            }
+            return list1;
+        }
+        public static List<Person> mergeList(List<Person> list1, Person[] list2)
+        {
+            for (int i = 0; i < list2.Length; i++)
+            {
+                list1.Add(list2[i]);
+            }
+            return list1;
+        }
+
 
         static DB()
         {
