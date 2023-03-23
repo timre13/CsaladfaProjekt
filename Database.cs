@@ -19,7 +19,8 @@ namespace DB
         public int id;
         public long? husband, wife;
         public long? location;
-        public long? date_year, date_month, date_day;
+        public long? start_year, start_month, start_day;
+        public long? end_year, end_month, end_day;
         public bool legal;
     }
 
@@ -222,7 +223,7 @@ namespace DB
         
         
 
-
+        /*
         public Person? GetSpouse()
         {
             var reader1 = DB.ExecReaderCmd($"SELECT id FROM relationship WHERE husband = {id} OR wife = {id}");
@@ -237,7 +238,26 @@ namespace DB
 
             return DB.getPerson((int)spouseId);
         }
+        */
 
+        public Relationship[] GetMarriages()
+        {
+            var reader1 = DB.ExecReaderCmd($"SELECT id FROM relationship WHERE husband = {id} OR wife = {id}");
+            var idList = new List<long>();
+            while (reader1.Read())
+            {
+                idList.Add(reader1.GetInt64(0));
+            }
+
+            var relationships = new List<Relationship>();
+            foreach (var id in idList)
+            {
+                relationships.Add(DB.getRelationship(id));
+            }
+            return relationships.ToArray();
+        }
+
+        /*
         public void SetSpouse(int sid)
         {
             Debug.WriteLine($"Setting spouse of {id} to {sid}");
@@ -262,11 +282,14 @@ namespace DB
             }
             DB.AddRelationship((long)rel.husband, (long)rel.wife);
         }
+        */
 
+        /*
         public void DeleteRelationships()
         {
             DB.ExecWriterCmd($"DELETE FROM relationship WHERE husband={id} OR wife={id}");
         }
+        */
     }
 
     public class Settlement
@@ -290,7 +313,7 @@ namespace DB
             "birthPlace, deathPlace, birth_year, birth_month, birth_day, " +
             "death_year, death_month, death_day, death_cause, occupation, notes";
 
-        public static string relationship_cols = "id, husband, wife, location, date_year, date_month, date_day, legal";
+        public static string relationship_cols = "id, husband, wife, location, date_year, date_month, date_day, divorce_year, divorce_month, divorce_day, legal";
     }
 
 
@@ -404,9 +427,12 @@ namespace DB
             relationship.husband = GetValOrNull<Int64>(reader, i++);
             relationship.wife = GetValOrNull<Int64>(reader, i++);
             relationship.location = GetValOrNull<Int64>(reader, i++);
-            relationship.date_year = GetValOrNull<Int64>(reader, i++);
-            relationship.date_month = GetValOrNull<Int64>(reader, i++);
-            relationship.date_day = GetValOrNull<Int64>(reader, i++);
+            relationship.start_year = GetValOrNull<Int64>(reader, i++);
+            relationship.start_month = GetValOrNull<Int64>(reader, i++);
+            relationship.start_day = GetValOrNull<Int64>(reader, i++);
+            relationship.end_year = GetValOrNull<Int64>(reader, i++);
+            relationship.end_month = GetValOrNull<Int64>(reader, i++);
+            relationship.end_day = GetValOrNull<Int64>(reader, i++);
             relationship.legal = reader.GetBoolean(i++);
 
             return relationship;
@@ -437,6 +463,14 @@ namespace DB
         public static string LongToSql(in long? input)
         {
             return input == null ? "NULL" : input.ToString();
+        }
+
+        public static string DateToString(long? year, long? month, long? day)
+        {
+            string yearStr = (year == null ? "????" : year!.ToString()!.PadRight(4, '0'));
+            string monthStr = (month == null ? "??" : month!.ToString()!.PadRight(2, '0'));
+            string dayStr = (day == null ? "??" : day!.ToString()!.PadRight(2, '0'));
+            return $"{yearStr}-{monthStr}-{dayStr}";
         }
 
         public static void UpdatePerson(Person person)
@@ -484,10 +518,12 @@ namespace DB
         }
         */
 
+        /*
         public static void AddRelationship(long husband, long wife)
         {
             ExecWriterCmd($"INSERT INTO relationship (husband, wife, legal) VALUES ({husband}, {wife}, TRUE)");
         }
+        */
 
         public static Person[] getAllPeople()
         {
@@ -506,11 +542,13 @@ namespace DB
         }
 
 
-        public static Settlement GetSettlement(int id)
+        public static Settlement? GetSettlement(int id)
         {
             Settlement settl = new Settlement();
             settl.id = id;
             var settlementReader = ExecReaderCmd($"SELECT settlement, provinceID FROM settlement WHERE id = { id }");
+            if (!settlementReader.HasRows)
+                return null;
             settlementReader.Read();
             settl.name = GetValOrNull<string>(settlementReader, 0);
             long? provId = GetValOrNull<long>(settlementReader, 1);
@@ -538,7 +576,9 @@ namespace DB
             {
                 ids.Add(reader.GetInt32(0));
             }
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
             return ids.Select(x => GetSettlement(x)).ToArray();
+#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
         }
 
         public static void AddCountry(in string name)

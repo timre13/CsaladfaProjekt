@@ -220,7 +220,7 @@ namespace Csaladfa
                 PersonDeathPlaceCombobox.SelectedIndex = 0;
                 PersonOccupationEntry.Clear();
                 PersonNotesEntry.Clear();
-                PersonSpouseCombobox.SelectedIndex = 0;
+                PersonMarriageList.Items.Clear();
 
                 foreach (var child in RightGrid.Children)
                     (child as dynamic).IsEnabled = false;
@@ -231,8 +231,8 @@ namespace Csaladfa
             foreach (var child in RightGrid.Children)
                 (child as dynamic).IsEnabled = true;
 
-            List<Person> spouseListItems = new List<Person> { new Person() };
-            spouseListItems.AddRange(DB.DB.getAllPeople().Where(x => person.gender == null || x.gender == (person.gender == 'M' ? 'F' : 'M') || x.gender == null));
+            //List<Person> spouseListItems = new List<Person> { new Person() };
+            //spouseListItems.AddRange(DB.DB.getAllPeople().Where(x => person.gender == null || x.gender == (person.gender == 'M' ? 'F' : 'M') || x.gender == null));
 
             PersonSurnameEntry.Text = person.surname ?? "";
             PersonMaidenSurnameEntry.Text = person.maiden_surname ?? "";
@@ -257,10 +257,21 @@ namespace Csaladfa
             PersonOccupationEntry.Text = person.occupation ?? "";
             PersonNotesEntry.Text = person.notes ?? "";
 
-            PersonSpouseCombobox.ItemsSource = spouseListItems;
-            PersonSpouseCombobox.SelectedIndex = spouseListItems
-                .Select((v, i) => new {index=i, value=v})
-                .Where(x => x.value.id == person.GetSpouse()?.id).FirstOrDefault()?.index ?? 0;
+
+            PersonMarriageList.Items.Clear();
+            foreach (var m in person.GetMarriages())
+            {
+                var spouseId = m.husband == id ? m.wife : m.husband;
+                var spouse = spouseId == null ? null : DB.DB.getPerson((int)spouseId);
+                PersonMarriageList.Items.Add(new
+                {
+                    spouseName = spouse?.FormattedName ?? "???",
+                    startDate = DB.DB.DateToString(m.start_year, m.start_month, m.start_day), // FIXME: NULL helyett 0?
+                    endDate = DB.DB.DateToString(m.end_year, m.end_month, m.end_day),
+                    placeName = (m.location == null ? "???" : DB.DB.GetSettlement((int)m.location)?.DisplayName ?? "???"),
+                    isLegal = (m.legal ? "igen" : "nem"),
+                });
+            }
         }
 
         private void NewPersonMenuItem_Click(object sender, RoutedEventArgs e)
@@ -365,9 +376,7 @@ namespace Csaladfa
 
 
             DB.DB.UpdatePerson(person);
-            person.DeleteRelationships();
-            if (PersonSpouseCombobox.SelectedIndex != 0)
-                person.SetSpouse((PersonSpouseCombobox.SelectedValue as Person).id);
+            //person.DeleteRelationships();
             UpdatePersonList();
             PersonList.SelectedIndex = _personListItems
                 .Select((v, i) => new { value = v, index = i })

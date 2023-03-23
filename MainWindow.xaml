@@ -151,7 +151,6 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"></RowDefinition>
-                            <RowDefinition Height="25"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
@@ -161,9 +160,20 @@
                         <ComboBox x:Name="PersonParentsCombobox" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="11" Grid.Column="1"/>
                         -->
 
-                        <Label Content="Házastárs:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
-                        <ComboBox x:Name="PersonSpouseCombobox" DisplayMemberPath="FormattedName" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="0" Grid.Column="1"/>
+                        <Label Content="Házasságok:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                        <ListView x:Name="PersonMarriageList" HorizontalAlignment="Left" VerticalAlignment="Center" Width="370" Height="200" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Házastárs" DisplayMemberBinding="{Binding spouseName}"/>
+                                    <GridViewColumn Header="Házasság Dátuma" DisplayMemberBinding="{Binding startDate}"/>
+                                    <GridViewColumn Header="Válás Dátuma" DisplayMemberBinding="{Binding endDate}"/>
+                                    <GridViewColumn Header="Hely" DisplayMemberBinding="{Binding placeName}"/>
+                                    <GridViewColumn Header="Törvényes" DisplayMemberBinding="{Binding isLegal}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
 
+                        <!--
                         <Label Content="Rokonok:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
                         <ListView x:Name="PersonRelativeList" HorizontalAlignment="Left" VerticalAlignment="Center" Width="370" Height="200" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
                             <ListView.View>
@@ -173,10 +183,11 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
+                        -->
                     </Grid>
                 </TabItem>
             </TabControl>
-        
+
             <Button x:Name="PersonInfoSaveButton" Content="Mentés" Padding="5" Foreground="Green" FontWeight="Bold"
                     Click="PersonInfoSaveButton_Click" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="0"/>
             <Button x:Name="PersonDeleteButton" Content="Törlés" Padding="5" Foreground="Red"
