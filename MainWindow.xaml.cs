@@ -222,18 +222,14 @@ namespace Csaladfa
                 PersonNotesEntry.Clear();
                 PersonSpouseCombobox.SelectedIndex = 0;
 
-                foreach (var child in PersonInfoGrid.Children)
-                {
+                foreach (var child in RightGrid.Children)
                     (child as dynamic).IsEnabled = false;
-                }
 
                 return;
             }
 
-            foreach (var child in PersonInfoGrid.Children)
-            {
+            foreach (var child in RightGrid.Children)
                 (child as dynamic).IsEnabled = true;
-            }
 
             List<Person> spouseListItems = new List<Person> { new Person() };
             spouseListItems.AddRange(DB.DB.getAllPeople().Where(x => person.gender == null || x.gender == (person.gender == 'M' ? 'F' : 'M') || x.gender == null));

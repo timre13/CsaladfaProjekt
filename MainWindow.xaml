@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Csaladfa"
         x:Class="Csaladfa.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="810"
+        Title="MainWindow" Height="800" Width="840"
         ResizeMode="NoResize"
         Closing="Window_Closing">
     <Grid>
@@ -18,7 +18,7 @@
             <ColumnDefinition Width="400"/>
             <!--<ColumnDefinition Width="*"/>-->
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="380"/>
+            <ColumnDefinition Width="390"/>
         </Grid.ColumnDefinitions>
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
             <MenuItem Header="Új...">
@@ -46,13 +46,21 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <TabControl Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="400">
-            <TabItem>
-                <TabItem.Header>
-                    <Label Content="Adatok"/>
-                </TabItem.Header>
-                <Grid>
-                    <Grid Margin="10,10,10,10" x:Name="PersonInfoGrid">
+        <Grid x:Name="RightGrid" Grid.Row="1" Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TabControl Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="400">
+                <TabItem>
+                    <TabItem.Header>
+                        <Label Content="Adatok"/>
+                    </TabItem.Header>
+                    <Grid Margin="10,10,10,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
@@ -130,17 +138,34 @@
 
                         <Label Content="Megjegyzés:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="10" Grid.Column="0"/>
                         <TextBox x:Name="PersonNotesEntry" TextWrapping="Wrap" AcceptsReturn="True" SpellCheck.IsEnabled="True" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Height="200" Grid.Row="10" Grid.Column="1"/>
+                    </Grid>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <Label Content="Kapcsolatok"/>
+                    </TabItem.Header>
+                    <Grid Margin="10,10,10,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
 
                         <!--
-                    <Label Content="Szülők:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="11" Grid.Column="0"/>
-                    <ComboBox x:Name="PersonParentsCombobox" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="11" Grid.Column="1"/>
-                    -->
+                        <Label Content="Szülők:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="11" Grid.Column="0"/>
+                        <ComboBox x:Name="PersonParentsCombobox" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="11" Grid.Column="1"/>
+                        -->
 
-                        <Label Content="Házastárs:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="11" Grid.Column="0"/>
-                        <ComboBox x:Name="PersonSpouseCombobox" DisplayMemberPath="FormattedName" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="11" Grid.Column="1"/>
+                        <Label Content="Házastárs:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                        <ComboBox x:Name="PersonSpouseCombobox" DisplayMemberPath="FormattedName" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Grid.Row="0" Grid.Column="1"/>
 
-                        <Label Content="Rokonok:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="12" Grid.Column="0"/>
-                        <ListView x:Name="PersonRelativeList" HorizontalAlignment="Left" VerticalAlignment="Center" Width="370" Height="200" Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Label Content="Rokonok:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+                        <ListView x:Name="PersonRelativeList" HorizontalAlignment="Left" VerticalAlignment="Center" Width="370" Height="200" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Kapcsolat"></GridViewColumn>
@@ -148,12 +173,14 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-
-                        <Button x:Name="PersonInfoSaveButton" Content="Mentés" Padding="5" Foreground="Green" FontWeight="Bold" Click="PersonInfoSaveButton_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="14" Grid.Column="0"/>
-                        <Button x:Name="PersonDeleteButton" Content="Törlés" Padding="5" Foreground="Red" Click="PersonDeleteButton_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="14" Grid.Column="1"/>
                     </Grid>
-                </Grid>
-            </TabItem>
-        </TabControl>
+                </TabItem>
+            </TabControl>
+        
+            <Button x:Name="PersonInfoSaveButton" Content="Mentés" Padding="5" Foreground="Green" FontWeight="Bold"
+                    Click="PersonInfoSaveButton_Click" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="0"/>
+            <Button x:Name="PersonDeleteButton" Content="Törlés" Padding="5" Foreground="Red"
+                    Click="PersonDeleteButton_Click" Margin="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="1"/>
+        </Grid>
     </Grid>
 </Window>
