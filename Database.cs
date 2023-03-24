@@ -505,6 +505,11 @@ namespace DB
 
         }
 
+        public static void DeleteRelationship(long id)
+        {
+            ExecWriterCmd($"DELETE FROM relationship WHERE id = {id}");
+        }
+
         /*
         public static void UpdateRelationship(in Relationship rel)
         {

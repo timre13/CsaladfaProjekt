@@ -265,6 +265,7 @@ namespace Csaladfa
                 var spouse = spouseId == null ? null : DB.DB.getPerson((int)spouseId);
                 PersonMarriageList.Items.Add(new
                 {
+                    id = m.id,
                     spouseName = spouse?.FormattedName ?? "???",
                     startDate = DB.DB.DateToString(m.start_year, m.start_month, m.start_day), // FIXME: NULL helyett 0?
                     endDate = DB.DB.DateToString(m.end_year, m.end_month, m.end_day),
@@ -272,6 +273,9 @@ namespace Csaladfa
                     isLegal = (m.legal ? "igen" : "nem"),
                 });
             }
+            PersonMarriageList.SelectedIndex = 0;
+            if (PersonMarriageList.Items.Count == 0)
+                RelationshipDeleteButton.IsEnabled = false;
         }
 
         private void NewPersonMenuItem_Click(object sender, RoutedEventArgs e)
@@ -394,6 +398,25 @@ namespace Csaladfa
             UpdatePersonList();
             PersonList.UnselectAll();
             SetSelectedPerson(-1);
+        }
+
+        private void RelationshipDeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PersonMarriageList.SelectedItem == null)
+                return;
+            Debug.WriteLine($"Deleting relationship: {PersonMarriageList.SelectedItem}");
+            DB.DB.DeleteRelationship((PersonMarriageList.SelectedItem as dynamic).id);
+            SetSelectedPerson(_selectedPersonId);
+        }
+
+        private void PersonMarriageList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Debug.WriteLine($"Selected relationship: {PersonMarriageList.SelectedItem ?? "None"}");
+
+            if (PersonMarriageList.SelectedItem == null)
+                RelationshipDeleteButton.IsEnabled = false;
+            else
+                RelationshipDeleteButton.IsEnabled = true;
         }
     }
 }
