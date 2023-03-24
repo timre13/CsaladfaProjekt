@@ -305,6 +305,16 @@ namespace DB
                     return "(Ismeretlen)";
                 return $"{countryName ?? "-"}, {provinceName ?? "-"}, {name ?? "-"}";
             } }
+
+        public string DisplayNameReversed
+        {
+            get
+            {
+                if (id == -1)
+                    return "(Ismeretlen)";
+                return $"{name ?? "-"}, {provinceName ?? "-"}, {countryName ?? "-"}";
+            }
+        }
     }
 
     public class TXT
@@ -353,7 +363,7 @@ namespace DB
 
         public static SQLiteDataReader ExecReaderCmd(string command)
         {
-            // Debug.WriteLine($"Executing reader command: \"{command}\"");
+            Debug.WriteLine($"Executing reader command: \"{command}\"");
             using (SQLiteCommand cmd = _conn.CreateCommand())
             {
                 cmd.CommandText = command;

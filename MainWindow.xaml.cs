@@ -414,9 +414,26 @@ namespace Csaladfa
             Debug.WriteLine($"Selected relationship: {PersonMarriageList.SelectedItem ?? "None"}");
 
             if (PersonMarriageList.SelectedItem == null)
+            {
                 RelationshipDeleteButton.IsEnabled = false;
+                RelationshipEditButton.IsEnabled = false;
+            }
             else
+            {
                 RelationshipDeleteButton.IsEnabled = true;
+                RelationshipEditButton.IsEnabled = true;
+            }
+        }
+
+        private void RelationshipEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PersonMarriageList.SelectedItem == null)
+                return;
+            var rel = DB.DB.getRelationship((PersonMarriageList.SelectedItem as dynamic).id);
+            var dlg = new RelationshipEditWindow(rel);
+            dlg.Title = "Kapcsolat Szerkesztő";
+            dlg.Owner = this;
+            dlg.ShowDialog();
         }
     }
 }
