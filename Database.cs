@@ -178,26 +178,7 @@ namespace DB
 
         }
         
-        public Person[] getParents(int generation)
-        {
 
-            Person[] parents = this.getParents();
-
-            for (int i = 0; i < generation-1; i++)
-            {
-                List<Person> newGeneration = new List<Person>();
-
-                for (int j = 0; j < parents.Length; j++)
-                {
-                    if (parents[j] != null) 
-                        newGeneration = DB.mergeList(newGeneration, parents[j].getParents() );
-                }
-
-                parents = newGeneration.ToArray();
-            }
-            
-            return parents;
-        }
 
         public Person[] getParents()
         {
@@ -220,8 +201,77 @@ namespace DB
             }
         }
 
+        public Person[] getParents(int generation)
+        {
+
+            Person[] parents = this.getParents();
+
+            for (int i = 0; i < generation - 1; i++)
+            {
+                List<Person> newGeneration = new List<Person>();
+
+                for (int j = 0; j < parents.Length; j++)
+                {
+                    if (parents[j] != null)
+                        newGeneration = DB.mergeList(newGeneration, parents[j].getParents());
+                }
+
+                parents = newGeneration.ToArray();
+            }
+
+            return parents;
+        }
+
+        public Person[] getChildren()
+        {
+
+            // Kapcsolatok meghatározása:
+            List<int> relations = new List<int>();
+
+            var reader = DB.ExecReaderCmd($"SELECT {TXT.relationship_cols} FROM relationship WHERE wife = {this.id} OR " +
+                $"husband = {this.id}");
+
+            while (reader.Read())
+                relations.Add(DB.getRelationshipFromReader(reader).id);
+
+            // Utódok keresése:
+
+            List<Person> children = new List<Person>();
+
+            reader = DB.ExecReaderCmd($"SELECT {TXT.person_cols} FROM person WHERE ParentsID IN ({string.Join(",",relations)})");
+
+            while (reader.Read())
+                children.Add(DB.getPersonFromReader(reader));
+
+            return children.ToArray();
+        }
+
         
-        
+        public Person[] getChildren(int generation)
+        {
+
+            Person[] children = this.getChildren();
+
+            for (int i = 0; i < generation - 1; i++)
+            {
+                foreach(Person person in children)
+                    Debug.WriteLine("//" + person.id + "//");
+
+                List<Person> newGeneration = new List<Person>();
+
+                for (int j = 0; j < children.Length; j++)
+                {
+                    if (children[j] != null)
+                        newGeneration = DB.mergeList(newGeneration, children[j].getChildren());
+
+                }
+
+                children = newGeneration.ToArray();
+            }
+
+            return children;
+        }
+
 
         /*
         public Person? GetSpouse()

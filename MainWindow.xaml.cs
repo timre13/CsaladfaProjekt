@@ -71,8 +71,8 @@ namespace Csaladfa
             InitializeComponent();
 
             /*
-            DB.Person[] people = DB.DB.getPerson(17).getParents(6);
-            Debug.WriteLine("Nagyszülők:");
+            DB.Person[] people = DB.DB.getPerson(25).getChildren(2);
+            Debug.WriteLine("Gyerekek:");
             foreach (var person in people)
             { 
                 if (person != null)
