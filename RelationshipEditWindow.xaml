@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Csaladfa"
         mc:Ignorable="d"
-        Title="RelationshipEditWindow" Width="500" Height="400" >
+        Title="RelationshipEditWindow" Width="500" Height="260">
     <Grid Margin="10,10,10,10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -51,5 +51,7 @@
         </Grid>
         <Label Content="Törvényes: " HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0"/>
         <CheckBox x:Name="IsLegalCheckBox" Content="" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="5" Grid.Column="1"/>
+
+        <Button x:Name="RelationshipSaveButton" Content="Mentés" Click="RelationshipSaveButton_Click" Foreground="Green" Padding="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>
