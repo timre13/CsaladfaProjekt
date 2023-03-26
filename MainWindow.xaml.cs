@@ -194,6 +194,11 @@ namespace Csaladfa
             SetSelectedPerson(selected?.id ?? -1);
         }
 
+        public void ReloadPerson()
+        {
+            SetSelectedPerson(_selectedPersonId);
+        }
+
         private void SetSelectedPerson(int id)
         {
             _selectedPersonId = id;

@@ -570,18 +570,14 @@ namespace DB
             ExecWriterCmd($"DELETE FROM relationship WHERE id = {id}");
         }
 
-        /*
         public static void UpdateRelationship(in Relationship rel)
         {
-            //ExecWriterCmd($"DELETE FROM relationship WHERE husband={rel.husband} OR wife={rel.wife}");
-
-            /*var modified = ExecWriterCmd($"UPDATE relationship SET husband={rel.husband}, wife={rel.wife} WHERE id={rel.id}");
-            if (modified == 0)
-            {
-            ExecWriterCmd($"INSERT INTO relationship (id, husband, wife, legal) VALUES ({rel.id}, {rel.husband}, {rel.wife}, TRUE)");
-            //}
+            ExecWriterCmd($"UPDATE relationship SET husband={LongToSql(rel.husband)}, wife={LongToSql(rel.wife)}, location={LongToSql(rel.location)}, " +
+                $"date_year={LongToSql(rel.start_year)}, date_month={LongToSql(rel.start_month)}, date_day={LongToSql(rel.start_day)}, " +
+                $"legal={(rel.legal ? 1 : 0)}, " +
+                $"divorce_year={LongToSql(rel.end_year)}, divorce_month={LongToSql(rel.end_month)}, divorce_day={LongToSql(rel.end_day)} WHERE id={rel.id}");
         }
-        */
+
         public static int AddRelationship(long? husband, long? wife)
         {
             ExecWriterCmd($"INSERT INTO relationship (husband, wife, legal) VALUES " +

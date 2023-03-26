@@ -25,9 +25,12 @@ namespace Csaladfa
     /// </summary>
     public partial class RelationshipEditWindow : Window
     {
+        private Relationship _relationship;
+
         public RelationshipEditWindow(Relationship rel)
         {
             InitializeComponent();
+            _relationship = rel;
 
             List<Person> wifeListItems = new List<Person> { new Person() };
             wifeListItems.AddRange(DB.DB.getAllPeople()
@@ -82,6 +85,23 @@ namespace Csaladfa
         private void StartOrEndDateYearInput_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !_yearRegex.IsMatch(e.Text) || ((sender as TextBox)!.Text.Length == 0 && e.Text[0] == '0');
+        }
+
+        private void RelationshipSaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            _relationship.husband = HusbandCombobox.SelectedIndex == 0 ? null : (HusbandCombobox.SelectedItem as dynamic).id;
+            _relationship.wife = WifeCombobox.SelectedIndex == 0 ? null : (WifeCombobox.SelectedItem as dynamic).id;
+            _relationship.location = MarriagePlaceCombobox.SelectedIndex == 0 ? null : (MarriagePlaceCombobox.SelectedItem as dynamic).id;
+            _relationship.start_year =  MarriageDateYearInput.Text == "0" ? null : int.Parse(MarriageDateYearInput.Text);
+            _relationship.start_month = MarriageDateMonthInput.SelectedIndex == 0 ? null : MarriageDateMonthInput.SelectedIndex;
+            _relationship.start_day = MarriageDateDayInput.SelectedIndex == 0 ? null : MarriageDateDayInput.SelectedIndex;
+            _relationship.legal = IsLegalCheckBox.IsChecked ?? false;
+            _relationship.end_year =  DivorceDateYearInput.Text == "0" ? null : int.Parse(DivorceDateYearInput.Text);
+            _relationship.end_month = DivorceDateMonthInput.SelectedIndex == 0 ? null : DivorceDateMonthInput.SelectedIndex;
+            _relationship.end_day = DivorceDateDayInput.SelectedIndex == 0 ? null : DivorceDateDayInput.SelectedIndex;
+            DB.DB.UpdateRelationship(_relationship);
+
+            ((MainWindow)Owner).ReloadPerson();
         }
     }
 }
