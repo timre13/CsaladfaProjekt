@@ -71,14 +71,16 @@ namespace Csaladfa
         {
             InitializeComponent();
 
-            
+            /*
             DB.Person[] people = DB.DB.getPerson(65).getCousins(6);
             Debug.WriteLine("Testvérek:");
             foreach (var person in people)
             { 
                 if (person != null)
                     Debug.WriteLine("psChildren: " + person.id + " " + person.surname + " " + person.forename);
-            }
+            }*/
+
+
 
 
 

@@ -318,6 +318,8 @@ namespace DB
         }
 
 
+
+
         /*
         public Person? GetSpouse()
         {
@@ -443,6 +445,44 @@ namespace DB
                 list1.Add(list2[i]);
             }
             return list1;
+        }
+
+        public static Relationship[] getAllRelationships()
+        {
+            var reader = ExecReaderCmd($"SELECT {TXT.relationship_cols} FROM relationship");
+
+            List<Relationship> relships = new List<Relationship>();
+
+            while (reader.Read())
+            {
+                relships.Add(getRelationshipFromReader(reader));
+            }
+
+            return relships.ToArray();
+        }
+
+
+        public static void arrangeManWomanRelations()
+        {
+            Relationship[] relships = getAllRelationships();
+
+            for (int i = 0; i < relships.Length; i++)
+            {
+                Person husband = getPerson((int)relships[i].husband);
+                Person wife = getPerson((int)relships[i].wife);
+
+                if (husband != null && wife != null)
+                    if (husband.gender == 'F' || wife.gender == 'M')
+                        {
+                            long? tmp = relships[i].wife;
+                            relships[i].wife = relships[i].husband;
+                            relships[i].husband = tmp;
+
+                            UpdateRelationship(relships[i]);
+                        }
+            }
+
+
         }
 
 
