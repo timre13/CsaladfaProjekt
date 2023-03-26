@@ -582,13 +582,15 @@ namespace DB
             //}
         }
         */
-
-        /*
-        public static void AddRelationship(long husband, long wife)
+        public static int AddRelationship(long? husband, long? wife)
         {
-            ExecWriterCmd($"INSERT INTO relationship (husband, wife, legal) VALUES ({husband}, {wife}, TRUE)");
+            ExecWriterCmd($"INSERT INTO relationship (husband, wife, legal) VALUES " +
+                $"({husband?.ToString() ?? "NULL"}, {wife?.ToString() ?? "NULL"}, FALSE)");
+
+            var reader = ExecReaderCmd("SELECT MAX(id) from RELATIONSHIP");
+            reader.Read();
+            return reader.GetInt32(0);
         }
-        */
 
         public static Person[] getAllPeople()
         {
