@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -434,6 +435,30 @@ namespace Csaladfa
             dlg.Title = "Kapcsolat Szerkesztő";
             dlg.Owner = this;
             dlg.ShowDialog();
+        }
+
+        private void RelationshipAddButton_Click(object sender, RoutedEventArgs e)
+        {
+            var personId = (PersonList.SelectedItem as dynamic).id;
+            if (PersonList.SelectedItem == null) return;
+
+            int relId;
+            if (DB.DB.getPerson((PersonList.SelectedItem as dynamic).id)!.gender == 'F')
+            {
+                relId = DB.DB.AddRelationship(null, personId);
+            }
+            else
+            {
+                relId = DB.DB.AddRelationship(personId, null);
+            }
+            SetSelectedPerson(_selectedPersonId);
+            PersonMarriageList.SelectedIndex = PersonMarriageList.Items.Count-1;
+            RelationshipEditButton_Click(new(), new());
+        }
+
+        private void PersonMarriageList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            RelationshipEditButton_Click(new(), new());
         }
     }
 }

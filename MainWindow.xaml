@@ -162,7 +162,7 @@
                         -->
 
                         <Label Content="Házasságok:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
-                        <ListView x:Name="PersonMarriageList" SelectionChanged="PersonMarriageList_SelectionChanged" HorizontalAlignment="Left" VerticalAlignment="Center" Width="370" Height="200" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                        <ListView x:Name="PersonMarriageList" SelectionChanged="PersonMarriageList_SelectionChanged" MouseDoubleClick="PersonMarriageList_MouseDoubleClick" HorizontalAlignment="Left" VerticalAlignment="Center" Width="370" Height="200" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Házastárs" DisplayMemberBinding="{Binding spouseName}"/>
@@ -182,7 +182,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Button Content="Hozzáadás" Foreground="Green" Margin="0,0,10,0" Padding="5" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                            <Button Content="Hozzáadás" x:Name="RelationshipAddButton" Click="RelationshipAddButton_Click" Foreground="Green" Margin="0,0,10,0" Padding="5" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
                             <Button Content="Szerkesztés..." x:Name="RelationshipEditButton" Click="RelationshipEditButton_Click" Foreground="Blue" Margin="0,0,10,0" Padding="5" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
                             <Button Content="Törlés" x:Name="RelationshipDeleteButton" Click="RelationshipDeleteButton_Click" Foreground="Red" Margin="0,0,10,0" Padding="5" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
                         </Grid>

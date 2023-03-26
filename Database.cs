@@ -527,9 +527,9 @@ namespace DB
 
         public static string DateToString(long? year, long? month, long? day)
         {
-            string yearStr = (year == null ? "????" : year!.ToString()!.PadRight(4, '0'));
-            string monthStr = (month == null ? "??" : month!.ToString()!.PadRight(2, '0'));
-            string dayStr = (day == null ? "??" : day!.ToString()!.PadRight(2, '0'));
+            string yearStr = (year == null ? "????" : year!.ToString()!.PadLeft(4, '0'));
+            string monthStr = (month == null ? "??" : month!.ToString()!.PadLeft(2, '0'));
+            string dayStr = (day == null ? "??" : day!.ToString()!.PadLeft(2, '0'));
             return $"{yearStr}-{monthStr}-{dayStr}";
         }
 
@@ -582,13 +582,15 @@ namespace DB
             //}
         }
         */
-
-        /*
-        public static void AddRelationship(long husband, long wife)
+        public static int AddRelationship(long? husband, long? wife)
         {
-            ExecWriterCmd($"INSERT INTO relationship (husband, wife, legal) VALUES ({husband}, {wife}, TRUE)");
+            ExecWriterCmd($"INSERT INTO relationship (husband, wife, legal) VALUES " +
+                $"({husband?.ToString() ?? "NULL"}, {wife?.ToString() ?? "NULL"}, FALSE)");
+
+            var reader = ExecReaderCmd("SELECT MAX(id) from RELATIONSHIP");
+            reader.Read();
+            return reader.GetInt32(0);
         }
-        */
 
         public static Person[] getAllPeople()
         {
