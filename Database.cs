@@ -93,8 +93,7 @@ namespace DB
             };
         }
 
-
-        public Person[] getSiblings()
+        public Person[] getSibblings()
         {
             if (this.parents == null)
                 return new Person[] { };
@@ -178,42 +177,6 @@ namespace DB
             }
 
         }
-
-        public Person[] getCousins(int generation)
-        {
-            // Generation:
-            //     1 - unokatestvérek
-            //     2 - másod-unokatestvérek
-            //     3 - harmad-unokatestvérek
-            //     stb...
-
-            // ----------------------------------- Ősök (szülők) -----------------------------------
-
-            Person[] parents = this.getParents(generation);
-
-            // ----------------------------------- Ösök testvérei ----------------------------------
-
-            List<Person> pSiblings = new List<Person>();
-
-            for (int i = 0; i < parents.Length; i++)
-            {   
-                if (parents[i] != null)
-                    pSiblings = DB.mergeList(pSiblings, parents[i].getSiblings());
-            }
-
-            // ----------------------------- Ősök testvéreinek utódjai -----------------------------
-
-            List<Person> psChildren = new List<Person>();
-
-            for (int i = 0; i < pSiblings.Count; i++)
-            {
-                psChildren = DB.mergeList(psChildren, pSiblings[i].getChildren(generation));
-            }
-
-            return psChildren.ToArray();
-
-        }
-
         
 
 
@@ -240,11 +203,6 @@ namespace DB
 
         public Person[] getParents(int generation)
         {
-            // Generation:
-            //     1 - szülők
-            //     2 - nagyszülők
-            //     stb...
-
 
             Person[] parents = this.getParents();
 
@@ -291,16 +249,13 @@ namespace DB
         
         public Person[] getChildren(int generation)
         {
-            // Generation:
-            //     1 - gyerekek
-            //     2 - unokák
-            //     stb...
-
 
             Person[] children = this.getChildren();
 
             for (int i = 0; i < generation - 1; i++)
             {
+                foreach(Person person in children)
+                    Debug.WriteLine("//" + person.id + "//");
 
                 List<Person> newGeneration = new List<Person>();
 
@@ -308,7 +263,7 @@ namespace DB
                 {
                     if (children[j] != null)
                         newGeneration = DB.mergeList(newGeneration, children[j].getChildren());
-                    
+
                 }
 
                 children = newGeneration.ToArray();
@@ -458,7 +413,7 @@ namespace DB
 
         public static SQLiteDataReader ExecReaderCmd(string command)
         {
-            // Debug.WriteLine($"Executing reader command: \"{command}\"");
+            Debug.WriteLine($"Executing reader command: \"{command}\"");
             using (SQLiteCommand cmd = _conn.CreateCommand())
             {
                 cmd.CommandText = command;
