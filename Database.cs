@@ -396,6 +396,8 @@ namespace DB
         public string? provinceName = "";
         public string? countryName = "";
 
+        public string Name { get => name ?? "(Ismeretlen)"; }
+
         public string DisplayName { get
             {
                 if (id == -1)
@@ -612,6 +614,9 @@ namespace DB
 
         public static string DateToString(long? year, long? month, long? day)
         {
+            if ((year ?? 0) == 0 && (month ?? 0) == 0 && (day ?? 0) == 0)
+                return "-";
+
             string yearStr = (year == null ? "????" : year!.ToString()!.PadLeft(4, '0'));
             string monthStr = (month == null ? "??" : month!.ToString()!.PadLeft(2, '0'));
             string dayStr = (day == null ? "??" : day!.ToString()!.PadLeft(2, '0'));
