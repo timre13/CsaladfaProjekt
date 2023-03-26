@@ -317,6 +317,108 @@ namespace DB
             return children;
         }
 
+        public Person[] getSpouses()
+        {
+            Relationship[] marriages = this.GetMarriages();
+
+            List<Person> spouses = new List<Person>();
+
+            foreach (var item in marriages)
+            {
+                if (item.wife == this.id)
+                    spouses.Add(DB.getPerson((int)item.husband));
+                else
+                    spouses.Add(DB.getPerson((int)item.wife));
+            }
+            return spouses.ToArray();
+        }
+        
+
+        public Person[] getParentsInLaw(char gender)
+        {
+            // Gender:
+            //     'M' - apósok
+            //     'F' - anyósok
+
+            Person[] spouses = this.getSpouses();
+            List<Person> parentsInLaw = new List<Person>();
+
+            if (gender == 'F')
+                foreach (var spouse in spouses)
+                {
+                    parentsInLaw.Add(spouse.getParents()[1]);
+                }
+
+            else if (gender == 'M')
+                foreach (var spouse in spouses)
+                {
+                    parentsInLaw.Add(spouse.getParents()[0]);
+                }
+
+            return parentsInLaw.ToArray();
+        }
+
+        /*
+        public Person[] getSiblingsInLaw(char gender)
+        {
+            // Gender:
+            //     'M' - sógor
+            //     'F' - sógornő !
+
+
+            List<Person> siblingsInLaw = new List<Person>();
+
+            // ------------------------- Házastárs testvére -------------------------
+
+            Person[] spouses = this.getSpouses();
+
+            foreach (var spouse in spouses)
+            {
+                siblingsInLaw = DB.mergeList(siblingsInLaw, spouse.getSiblings());
+            }
+
+            // ------------------------- Testvér házastársa -------------------------
+
+            Person[] siblings = this.getSiblings();
+
+            foreach (var sibling in siblings)
+            {
+                siblingsInLaw = DB.mergeList(siblingsInLaw, sibling.getSpouses());
+            }
+
+            // ------------------------- Szűrés nem szerint -------------------------
+
+            List<Person> siblingsInLaw_new = new List<Person>();
+
+            for (int i = 0; i < siblingsInLaw.Count; i++)
+            {
+                if (siblingsInLaw[i].gender == gender)  <--itt volt a hiba
+                    siblingsInLaw_new.Add(siblingsInLaw[i]);
+            }
+
+            return siblingsInLaw_new.ToArray();
+
+        }*/
+
+
+        public Person[] getAuntsOrUncles(char gender)
+        {
+            List<Person> auntsOrUncles = new List<Person>();
+            List<Person> auntsOrUncles_new = new List<Person>();
+
+            foreach (var parent in this.getParents())
+                if (parent != null)
+                    auntsOrUncles = DB.mergeList(auntsOrUncles, parent.getSiblings());
+
+
+            foreach (var person in auntsOrUncles)
+            {
+                if (person.gender == gender)
+                    auntsOrUncles_new.Add(person);
+            }
+
+            return auntsOrUncles.ToArray();
+        }
 
 
 
