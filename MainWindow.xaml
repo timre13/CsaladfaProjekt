@@ -162,7 +162,7 @@
                         -->
 
                         <Label Content="Házasságok:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
-                        <ListView x:Name="PersonMarriageList" SelectionChanged="PersonMarriageList_SelectionChanged" HorizontalAlignment="Left" VerticalAlignment="Center" Width="370" Height="200" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                        <ListView x:Name="PersonMarriageList" SelectionChanged="PersonMarriageList_SelectionChanged" MouseDoubleClick="PersonMarriageList_MouseDoubleClick" HorizontalAlignment="Left" VerticalAlignment="Center" Width="370" Height="200" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Házastárs" DisplayMemberBinding="{Binding spouseName}"/>

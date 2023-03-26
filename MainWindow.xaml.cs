@@ -455,5 +455,10 @@ namespace Csaladfa
             PersonMarriageList.SelectedIndex = PersonMarriageList.Items.Count-1;
             RelationshipEditButton_Click(new(), new());
         }
+
+        private void PersonMarriageList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            RelationshipEditButton_Click(new(), new());
+        }
     }
 }
