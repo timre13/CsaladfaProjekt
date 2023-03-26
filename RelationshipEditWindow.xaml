@@ -26,10 +26,30 @@
         <Label Content="Feleség: " HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
         <ComboBox x:Name="WifeCombobox" Width="350" DisplayMemberPath="FormattedName" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
         <Label Content="Házasság ideje: " HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"/>
+        <Grid Width="200" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="95"/>
+                <ColumnDefinition Width="70"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="MarriageDateYearInput" PreviewTextInput="StartOrEndDateYearInput_PreviewTextInput" MaxLength="4" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+            <ComboBox x:Name="MarriageDateMonthInput" SelectedIndex="0" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
+            <ComboBox x:Name="MarriageDateDayInput" SelectedIndex="0" VerticalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
+        </Grid>
         <Label Content="Házasság helye: " HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"/>
         <ComboBox x:Name="MarriagePlaceCombobox" Width="350" DisplayMemberPath="DisplayNameReversed" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1"/>
         <Label Content="Válás ideje: " HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0"/>
+        <Grid Width="200" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="4" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="95"/>
+                <ColumnDefinition Width="70"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="DivorceDateYearInput" PreviewTextInput="StartOrEndDateYearInput_PreviewTextInput" MaxLength="4" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+            <ComboBox x:Name="DivorceDateMonthInput" SelectedIndex="0" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
+            <ComboBox x:Name="DivorceDateDayInput" SelectedIndex="0" VerticalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
+        </Grid>
         <Label Content="Törvényes: " HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0"/>
-        <CheckBox Content="" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="5" Grid.Column="1"/>
+        <CheckBox x:Name="IsLegalCheckBox" Content="" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="5" Grid.Column="1"/>
     </Grid>
 </Window>

@@ -527,9 +527,9 @@ namespace DB
 
         public static string DateToString(long? year, long? month, long? day)
         {
-            string yearStr = (year == null ? "????" : year!.ToString()!.PadRight(4, '0'));
-            string monthStr = (month == null ? "??" : month!.ToString()!.PadRight(2, '0'));
-            string dayStr = (day == null ? "??" : day!.ToString()!.PadRight(2, '0'));
+            string yearStr = (year == null ? "????" : year!.ToString()!.PadLeft(4, '0'));
+            string monthStr = (month == null ? "??" : month!.ToString()!.PadLeft(2, '0'));
+            string dayStr = (day == null ? "??" : day!.ToString()!.PadLeft(2, '0'));
             return $"{yearStr}-{monthStr}-{dayStr}";
         }
 
