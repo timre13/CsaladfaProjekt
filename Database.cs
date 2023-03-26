@@ -394,6 +394,8 @@ namespace DB
         public string? provinceName = "";
         public string? countryName = "";
 
+        public string Name { get => name ?? "(Ismeretlen)"; }
+
         public string DisplayName { get
             {
                 if (id == -1)

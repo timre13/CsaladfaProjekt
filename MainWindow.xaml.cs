@@ -276,7 +276,7 @@ namespace Csaladfa
                     spouseName = spouse?.FormattedName ?? "???",
                     startDate = DB.DB.DateToString(m.start_year, m.start_month, m.start_day), // FIXME: NULL helyett 0?
                     endDate = DB.DB.DateToString(m.end_year, m.end_month, m.end_day),
-                    placeName = (m.location == null ? "???" : DB.DB.GetSettlement((int)m.location)?.DisplayName ?? "???"),
+                    placeName = (m.location == null ? "???" : DB.DB.GetSettlement((int)m.location)?.Name ?? "???"),
                     isLegal = (m.legal ? "igen" : "nem"),
                 });
             }
