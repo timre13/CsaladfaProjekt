@@ -266,6 +266,39 @@ namespace DB
             return parents;
         }
 
+
+        public List<Person[]> getAllParents(int generation)
+        {
+            // Generation:
+            //     1 - szülők
+            //     2 - nagyszülők
+            //     3 - dédszülők
+            //     4 - ükszülők
+            //     5 - szépszülők
+
+            List<Person[]> parents = new List<Person[]>();
+            parents.Add(this.getParents());
+
+            for (int i = 0; i < generation - 1; i++)
+            {
+                List<Person> newGeneration = new List<Person>();
+
+                for (int j = 0; j < parents[parents.Count-1].Length; j++)
+                {
+                    if (parents[parents.Count-1][j] != null)
+                        newGeneration = DB.mergeList(newGeneration, parents[parents.Count-1][j].getParents());
+                }
+
+                if (newGeneration.Count == 0)
+                    return parents;
+                else
+                    parents.Add(newGeneration.ToArray());
+            }
+
+            return parents;
+        }
+
+
         public Person[] getChildren()
         {
 
@@ -320,6 +353,40 @@ namespace DB
 
             return children;
         }
+
+
+        public List<Person[]> getAllChildren(int generation)
+        {
+            // Generation:
+            //     1 - gyerekek
+            //     2 - unokák
+            //     3 - dédunokák
+            //     4 - ükunokák
+            //     5 - szépunokák
+
+            List<Person[]> children = new List<Person[]>();
+            children.Add(this.getChildren());
+
+            for (int i = 0; i < generation - 1; i++)
+            {
+
+                List<Person> newGeneration = new List<Person>();
+
+                for (int j = 0; j < children[children.Count - 1].Length; j++)
+                {
+                    if (children[children.Count-1][j] != null)
+                        newGeneration = DB.mergeList(newGeneration, children[children.Count-1][j].getChildren());
+
+                }
+                if (newGeneration.Count == 0)
+                    return children;
+                else
+                    children.Add(newGeneration.ToArray());
+            }
+
+            return children;
+        }
+
 
         public Person[] getSpouses()
         {
@@ -604,7 +671,8 @@ namespace DB
         {
             for (int i = 0; i < list2.Length; i++)
             {
-                list1.Add(list2[i]);
+                if (list2[i] != null)
+                    list1.Add(list2[i]);
             }
             return list1;
         }
