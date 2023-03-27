@@ -68,8 +68,8 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
-                            <RowDefinition Height="25"/>
-                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="0"/>
+                            <RowDefinition Height="0"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
@@ -82,18 +82,12 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-
-                        <Label Content="Keresztnév:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                        
+                        <Label Content="Vezetéknév:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
                         <TextBox x:Name="PersonSurnameEntry" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
 
-                        <Label Content="Leánykori Keresztnév:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
-                        <TextBox x:Name="PersonMaidenSurnameEntry" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
-
-                        <Label Content="Vezetéknév:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"/>
-                        <TextBox x:Name="PersonForenameEntry" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
-
-                        <Label Content="Leánykori Vezetéknév:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"/>
-                        <TextBox x:Name="PersonMaidenForenameEntry" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1"/>
+                        <Label Content="Keresztnév:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox x:Name="PersonForenameEntry" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
 
                         <Label Content="Nem:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0"/>
                         <ComboBox x:Name="GenderCombobox" HorizontalAlignment="Right" VerticalAlignment="Center" Width="100" Height="25" SelectedIndex="0" Grid.Row="4" Grid.Column="1">

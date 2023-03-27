@@ -216,9 +216,7 @@ namespace Csaladfa
             if (person == null)
             {
                 PersonSurnameEntry.Clear();
-                PersonMaidenSurnameEntry.Clear();
                 PersonForenameEntry.Clear();
-                PersonMaidenForenameEntry.Clear();
                 GenderCombobox.SelectedIndex = 0;
                 BirthDateYearInput.Clear();
                 BirthDateMonthInput.SelectedIndex = 0;
@@ -246,9 +244,7 @@ namespace Csaladfa
             //spouseListItems.AddRange(DB.DB.getAllPeople().Where(x => person.gender == null || x.gender == (person.gender == 'M' ? 'F' : 'M') || x.gender == null));
 
             PersonSurnameEntry.Text = person.surname ?? "";
-            PersonMaidenSurnameEntry.Text = person.maiden_surname ?? "";
             PersonForenameEntry.Text = person.forename ?? "";
-            PersonMaidenForenameEntry.Text = person.maiden_forename ?? "";
             GenderCombobox.SelectedIndex = person.GenderToIndex();
             BirthDateYearInput.Text = person.birth_year?.ToString() ?? "";
             BirthDateMonthInput.SelectedIndex = (int)(person.birth_month ?? 0);
@@ -500,8 +496,6 @@ namespace Csaladfa
             //person.parents = ;
             person.surname = EmptyToNull(PersonSurnameEntry.Text);
             person.forename = EmptyToNull(PersonForenameEntry.Text);
-            person.maiden_surname = EmptyToNull(PersonMaidenSurnameEntry.Text);
-            person.maiden_forename = EmptyToNull(PersonMaidenForenameEntry.Text);
             person.gender = IndexToGender(GenderCombobox.SelectedIndex);
 
             person.birthPlace = ((PersonBirthPlaceCombobox.SelectedItem as Settlement)?.id ?? -1) == -1 ? null : (PersonBirthPlaceCombobox.SelectedItem as Settlement)!.id;
