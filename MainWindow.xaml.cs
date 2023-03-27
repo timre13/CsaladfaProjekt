@@ -293,7 +293,7 @@ namespace Csaladfa
             { // Load relatives into list
                 var addRelative = (string relative, Person? p) => {
                     if (p == null) return;
-                    PersonRelativeList.Items.Add(new { relativeType = relative, personName = p.FormattedName });
+                    PersonRelativeList.Items.Add(new { relativeType = relative, personName = p.FormattedName, id=p.id });
                 };
 
                 /*
@@ -598,6 +598,20 @@ namespace Csaladfa
         private void PersonMarriageList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             RelationshipEditButton_Click(new(), new());
+        }
+
+        private void PersonRelativeList_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (PersonRelativeList.SelectedItem == null)
+                return;
+
+            var id = (PersonRelativeList.SelectedItem as dynamic).id;
+            PersonList.SelectedIndex = _personListItems
+                .Select((v, i) => new { value = v, index = i })
+                .Where(x => x.value.id == id)
+                .First().index;
+            PersonList.ScrollIntoView(PersonList.SelectedItem);
+            SetSelectedPerson(id);
         }
     }
 }
