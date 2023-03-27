@@ -191,7 +191,7 @@
                         </Grid>
 
                         <Label Content="Rokonok:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0"/>
-                        <ListView x:Name="PersonRelativeList" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="300" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+                        <ListView x:Name="PersonRelativeList" SelectionMode="Single" MouseLeftButtonUp="PersonRelativeList_MouseLeftButtonUp" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="300" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Width="200" Header="Kapcsolat" DisplayMemberBinding="{Binding relativeType}"/>
