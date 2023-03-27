@@ -150,10 +150,13 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
                         <!--
@@ -186,19 +189,17 @@
                             <Button Content="Szerkesztés..." x:Name="RelationshipEditButton" Click="RelationshipEditButton_Click" Foreground="Blue" Margin="0,0,10,0" Padding="5" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
                             <Button Content="Törlés" x:Name="RelationshipDeleteButton" Click="RelationshipDeleteButton_Click" Foreground="Red" Margin="0,0,10,0" Padding="5" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
                         </Grid>
-                            
 
-                        <!--
-                        <Label Content="Rokonok:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
-                        <ListView x:Name="PersonRelativeList" HorizontalAlignment="Left" VerticalAlignment="Center" Width="370" Height="200" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Label Content="Rokonok:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0"/>
+                        <ListView x:Name="PersonRelativeList" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="300" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="Kapcsolat"></GridViewColumn>
-                                    <GridViewColumn Header="Személy"></GridViewColumn>
+                                    <GridViewColumn Width="200" Header="Kapcsolat" DisplayMemberBinding="{Binding relativeType}"/>
+                                    <GridViewColumn Width="260" Header="Rokon Neve" DisplayMemberBinding="{Binding personName}"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        -->
+
                     </Grid>
                 </TabItem>
             </TabControl>

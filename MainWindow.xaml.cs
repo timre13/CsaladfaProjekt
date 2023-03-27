@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -230,6 +231,7 @@ namespace Csaladfa
                 PersonOccupationEntry.Clear();
                 PersonNotesEntry.Clear();
                 PersonMarriageList.Items.Clear();
+                PersonRelativeList.Items.Clear();
 
                 foreach (var child in RightGrid.Children)
                     (child as dynamic).IsEnabled = false;
@@ -285,6 +287,135 @@ namespace Csaladfa
             PersonMarriageList.SelectedIndex = 0;
             if (PersonMarriageList.Items.Count == 0)
                 RelationshipDeleteButton.IsEnabled = false;
+
+
+            PersonRelativeList.Items.Clear();
+            { // Load relatives into list
+                var addRelative = (string relative, Person? p) => {
+                    if (p == null) return;
+                    PersonRelativeList.Items.Add(new { relativeType = relative, personName = p.FormattedName });
+                };
+
+                /*
+                try
+                {
+                    foreach ()
+                }
+                catch (Exception) { }
+                */
+
+                try
+                {
+                    foreach (var p in person.getParents(1))
+                        addRelative("Szülő", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getParents(2))
+                        addRelative("Nagyszülő", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getParents(3))
+                        addRelative("Dédszülő", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getSpouses())
+                        addRelative("Házastárs", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getSiblings())
+                        addRelative("Testvér", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getHalfSibblings())
+                        addRelative("Féltestvér", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getChildren(1))
+                        addRelative("Gyerek", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getChildren(2))
+                        addRelative("Unoka", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getChildren(3))
+                        addRelative("Dédunoka", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getCousins(1))
+                        addRelative("Unokatestvér", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getCousins(2))
+                        addRelative("Másod-unokatestvér", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getCousins(3))
+                        addRelative("Harmad-unokatestvér", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getParentsInLaw('F'))
+                        addRelative("Anyós", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getParentsInLaw('M'))
+                        addRelative("Após", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getAuntsOrUncles('F'))
+                        addRelative("Nagynéni", p);
+                }
+                catch (Exception) { }
+
+                try
+                {
+                    foreach (var p in person.getAuntsOrUncles('M'))
+                        addRelative("Nagybácsi", p);
+                }
+                catch (Exception) { }
+            }
         }
 
         private void NewPersonMenuItem_Click(object sender, RoutedEventArgs e)
