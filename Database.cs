@@ -243,7 +243,9 @@ namespace DB
             // Generation:
             //     1 - szülők
             //     2 - nagyszülők
-            //     stb...
+            //     3 - dédszülők
+            //     4 - ükszülők
+            //     5 - szépszülők
 
 
             Person[] parents = this.getParents();
@@ -294,7 +296,9 @@ namespace DB
             // Generation:
             //     1 - gyerekek
             //     2 - unokák
-            //     stb...
+            //     3 - dédunokák
+            //     4 - ükunokák
+            //     5 - szépunokák
 
 
             Person[] children = this.getChildren();
@@ -321,7 +325,7 @@ namespace DB
         {
             Relationship[] marriages = this.GetMarriages();
 
-            List<Person> spouses = new List<Person>();
+            HashSet<Person> spouses = new HashSet<Person>();
 
             foreach (var item in marriages)
             {
@@ -329,6 +333,7 @@ namespace DB
                     spouses.Add(DB.getPerson((int)item.husband));
                 else
                     spouses.Add(DB.getPerson((int)item.wife));
+
             }
             return spouses.ToArray();
         }
@@ -341,7 +346,7 @@ namespace DB
             //     'F' - anyósok
 
             Person[] spouses = this.getSpouses();
-            List<Person> parentsInLaw = new List<Person>();
+            HashSet<Person> parentsInLaw = new HashSet<Person>();
 
             if (gender == 'F')
                 foreach (var spouse in spouses)
@@ -358,7 +363,35 @@ namespace DB
             return parentsInLaw.ToArray();
         }
 
-        /*
+
+        public Person[] getChildrenInLaw(char gender)
+        {
+            // Gender:
+            //     'M' - vő
+            //     'F' - meny
+
+            List<Person> childrenInLaw = new List<Person>();
+            HashSet<Person> childrenInLaw_new = new HashSet<Person>();
+
+            foreach (var child in this.getChildren())
+            {
+                childrenInLaw = DB.mergeList(childrenInLaw, child.getSpouses());
+            }
+
+            // ------------------------- Szűrés nem szerint -------------------------
+
+            for (int i = 0; i < childrenInLaw.Count; i++)
+            {
+                if (childrenInLaw[i].gender == gender)
+                    childrenInLaw_new.Add(childrenInLaw[i]);
+            }
+
+            return childrenInLaw_new.ToArray();
+        }
+
+
+
+
         public Person[] getSiblingsInLaw(char gender)
         {
             // Gender:
@@ -384,32 +417,41 @@ namespace DB
             foreach (var sibling in siblings)
             {
                 siblingsInLaw = DB.mergeList(siblingsInLaw, sibling.getSpouses());
+
             }
 
             // ------------------------- Szűrés nem szerint -------------------------
 
-            List<Person> siblingsInLaw_new = new List<Person>();
+            HashSet<Person> siblingsInLaw_new = new HashSet<Person>();
 
             for (int i = 0; i < siblingsInLaw.Count; i++)
             {
-                if (siblingsInLaw[i].gender == gender)  <--itt volt a hiba
+                if (siblingsInLaw[i].gender == gender)
                     siblingsInLaw_new.Add(siblingsInLaw[i]);
             }
 
             return siblingsInLaw_new.ToArray();
 
-        }*/
+        }
 
-        /*
+
+        
         public Person[] getAuntsOrUncles(char gender)
         {
+            // Gender:
+            //     'M' - unokaöccs
+            //     'F' - unokahúg
+
+
             List<Person> auntsOrUncles = new List<Person>();
-            List<Person> auntsOrUncles_new = new List<Person>();
+            HashSet<Person> auntsOrUncles_new = new HashSet<Person>();
 
             foreach (var parent in this.getParents())
                 if (parent != null)
                     auntsOrUncles = DB.mergeList(auntsOrUncles, parent.getSiblings());
 
+
+            // ------------------------- Szűrés nem szerint -------------------------
 
             foreach (var person in auntsOrUncles)
             {
@@ -418,7 +460,32 @@ namespace DB
             }
 
             return auntsOrUncles.ToArray();
-        }*/
+        }
+
+
+        public Person[] getNiecesOrNephews(char gender)
+        {
+            List<Person> niecesOrNephews = new List<Person>();
+            HashSet<Person> niecesOrNephews_new = new HashSet<Person>();
+
+
+            foreach (var sibling in this.getSiblings())
+                if (sibling != null)
+                    niecesOrNephews = DB.mergeList(niecesOrNephews, sibling.getChildren());
+
+
+            // ------------------------- Szűrés nem szerint -------------------------
+
+            foreach (var person in niecesOrNephews)
+            {
+                if (person.gender == gender)
+                    niecesOrNephews_new.Add(person);
+            }
+
+            return niecesOrNephews_new.ToArray();
+
+        }
+
 
 
 
@@ -533,16 +600,15 @@ namespace DB
     {
         public static SQLiteConnection _conn;
 
-        public static List<Person> mergeList(List<Person> list1, List<Person> list2)
+        public static List<Person> mergeList(List<Person> list1, Person[] list2)
         {
-            for (int i = 0; i < list2.Count; i++)
+            for (int i = 0; i < list2.Length; i++)
             {
-                if (list2[i] != null)
-                    list1.Add(list2[i]);
+                list1.Add(list2[i]);
             }
             return list1;
         }
-        public static List<Person> mergeList(List<Person> list1, Person[] list2)
+        public static HashSet<Person> mergeList(HashSet<Person> list1, Person[] list2)
         {
             for (int i = 0; i < list2.Length; i++)
             {
