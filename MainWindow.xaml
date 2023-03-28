@@ -77,8 +77,6 @@
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="25"/>
-                            <RowDefinition Height="25"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
@@ -130,11 +128,14 @@
                         <Label Content="Halál Helye:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="8" Grid.Column="0"/>
                         <ComboBox x:Name="PersonDeathPlaceCombobox" SelectedIndex="0" DisplayMemberPath="DisplayName" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="8" Grid.Column="1"/>
 
-                        <Label Content="Foglalkozás:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="9" Grid.Column="0"/>
-                        <TextBox x:Name="PersonOccupationEntry" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="9" Grid.Column="1"/>
+                        <Label Content="Halál Oka:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="9" Grid.Column="0"/>
+                        <TextBox x:Name="PersonDeathCauseEntry" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="9" Grid.Column="1"/>
 
-                        <Label Content="Megjegyzés:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="10" Grid.Column="0"/>
-                        <TextBox x:Name="PersonNotesEntry" TextWrapping="Wrap" AcceptsReturn="True" SpellCheck.IsEnabled="True" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="200" Grid.Row="10" Grid.Column="1"/>
+                        <Label Content="Foglalkozás:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="10" Grid.Column="0"/>
+                        <TextBox x:Name="PersonOccupationEntry" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="10" Grid.Column="1"/>
+
+                        <Label Content="Megjegyzés:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="11" Grid.Column="0"/>
+                        <TextBox x:Name="PersonNotesEntry" TextWrapping="Wrap" AcceptsReturn="True" SpellCheck.IsEnabled="True" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="200" Grid.Row="11" Grid.Column="1"/>
                     </Grid>
                 </TabItem>
                 <TabItem>

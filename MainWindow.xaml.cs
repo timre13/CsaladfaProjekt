@@ -228,6 +228,7 @@ namespace Csaladfa
                 DeathDateYearInput.Clear();
                 DeathDateMonthInput.SelectedIndex = 0;
                 DeathDateDayInput.SelectedIndex = 0;
+                PersonDeathCauseEntry.Clear();
                 PersonDeathPlaceCombobox.SelectedIndex = 0;
                 PersonOccupationEntry.Clear();
                 PersonNotesEntry.Clear();
@@ -274,6 +275,9 @@ namespace Csaladfa
                 PersonDeathPlaceCombobox.SelectedIndex = settlements
                     .Select((v, i) => new { sett = v, index = i })
                     .FirstOrDefault(x => x.sett.id == person.deathPlace)?.index ?? 0;
+
+            PersonDeathCauseEntry.Text = person.death_cause ?? "";
+
             PersonOccupationEntry.Text = person.occupation ?? "";
             PersonNotesEntry.Text = person.notes ?? "";
 
@@ -506,7 +510,6 @@ namespace Csaladfa
 
             DB.Person person = new Person();
             person.id = personId;
-            //person.parents = ;
             person.surname = EmptyToNull(PersonSurnameEntry.Text);
             person.forename = EmptyToNull(PersonForenameEntry.Text);
             person.gender = IndexToGender(GenderCombobox.SelectedIndex);
@@ -522,7 +525,7 @@ namespace Csaladfa
             person.death_year = DeathDateYearInput.Text == "" ? null : int.Parse(DeathDateYearInput.Text);
             person.death_month = DeathDateMonthInput.SelectedIndex == 0 ? null : DeathDateMonthInput.SelectedIndex;
             person.death_day = DeathDateDayInput.SelectedIndex == 0 ? null : DeathDateDayInput.SelectedIndex;
-            //person.death_cause - TODO
+            person.death_cause = PersonDeathCauseEntry.Text == "" ? null : PersonDeathCauseEntry.Text;
 
             person.occupation = EmptyToNull(PersonOccupationEntry.Text);
             person.notes = EmptyToNull(PersonNotesEntry.Text);
