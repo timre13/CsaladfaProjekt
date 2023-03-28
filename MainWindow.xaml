@@ -68,7 +68,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
-                            <RowDefinition Height="0"/>
+                            <RowDefinition Height="25"/>
                             <RowDefinition Height="0"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
@@ -89,13 +89,16 @@
                         <Label Content="Keresztnév:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
                         <TextBox x:Name="PersonForenameEntry" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
 
-                        <Label Content="Nem:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0"/>
-                        <ComboBox x:Name="GenderCombobox" HorizontalAlignment="Right" VerticalAlignment="Center" Width="100" Height="25" SelectedIndex="0" Grid.Row="4" Grid.Column="1">
+                        <Label Content="Nem:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"/>
+                        <ComboBox x:Name="GenderCombobox" HorizontalAlignment="Right" VerticalAlignment="Center" Width="100" Height="25" SelectedIndex="0" Grid.Row="2" Grid.Column="1">
                             <ComboBoxItem Content="(Ismeretlen)" Foreground="Gray"/>
                             <ComboBoxItem Content="Férfi"/>
                             <ComboBoxItem Content="Nő"/>
                             <ComboBoxItem Content="Egyéb"/>
                         </ComboBox>
+
+                        <Label Content="Szülők:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0"/>
+                        <ComboBox x:Name="ParentsCombobox" DisplayMemberPath="name" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="25" SelectedIndex="0" Grid.Row="4" Grid.Column="1"/>
 
                         <Label Content="Születési Idő:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0"/>
                         <Grid Width="200" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="5" Grid.Column="1">

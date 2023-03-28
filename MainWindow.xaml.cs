@@ -6,9 +6,11 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -218,6 +220,7 @@ namespace Csaladfa
                 PersonSurnameEntry.Clear();
                 PersonForenameEntry.Clear();
                 GenderCombobox.SelectedIndex = 0;
+                ParentsCombobox.SelectedIndex = 0;
                 BirthDateYearInput.Clear();
                 BirthDateMonthInput.SelectedIndex = 0;
                 BirthDateDayInput.SelectedIndex = 0;
@@ -246,6 +249,16 @@ namespace Csaladfa
             PersonSurnameEntry.Text = person.surname ?? "";
             PersonForenameEntry.Text = person.forename ?? "";
             GenderCombobox.SelectedIndex = person.GenderToIndex();
+
+            List<dynamic> relationships = new List<dynamic> { new { id = -1, name = "(Ismeretlen)" } };
+            relationships.AddRange(DB.DB.getAllRelationships().Select(x => new {id=x.id,
+                name=$"{DB.DB.getPerson((int)(x.wife ?? -1))?.FormattedName ?? "???"} és {DB.DB.getPerson((int)(x.husband ?? -1))?.FormattedName ?? "???"}"
+            }));
+            ParentsCombobox.ItemsSource = relationships;
+            ParentsCombobox.SelectedIndex = relationships
+                    .Select((v, i) => new { value = v, index = i })
+                    .FirstOrDefault(x => x.value.id == person.parents)?.index ?? 0;
+
             BirthDateYearInput.Text = person.birth_year?.ToString() ?? "";
             BirthDateMonthInput.SelectedIndex = (int)(person.birth_month ?? 0);
             BirthDateDayInput.SelectedIndex = (int)(person.birth_day ?? 0);
@@ -253,14 +266,14 @@ namespace Csaladfa
             if (person.birthPlace != null)
                 PersonBirthPlaceCombobox.SelectedIndex = settlements
                     .Select((v, i) => new { sett = v, index = i })
-                    .FirstOrDefault(x => x.sett.id == person.birthPlace)?.index ?? -1;
+                    .FirstOrDefault(x => x.sett.id == person.birthPlace)?.index ?? 0;
             DeathDateYearInput.Text = person.death_year?.ToString() ?? "";
             DeathDateMonthInput.SelectedIndex = (int)(person.death_month ?? 0);
             DeathDateDayInput.SelectedIndex = (int)(person.death_day ?? 0);
             if (person.birthPlace != null)
                 PersonDeathPlaceCombobox.SelectedIndex = settlements
                     .Select((v, i) => new { sett = v, index = i })
-                    .FirstOrDefault(x => x.sett.id == person.deathPlace)?.index ?? -1;
+                    .FirstOrDefault(x => x.sett.id == person.deathPlace)?.index ?? 0;
             PersonOccupationEntry.Text = person.occupation ?? "";
             PersonNotesEntry.Text = person.notes ?? "";
 
@@ -497,6 +510,8 @@ namespace Csaladfa
             person.surname = EmptyToNull(PersonSurnameEntry.Text);
             person.forename = EmptyToNull(PersonForenameEntry.Text);
             person.gender = IndexToGender(GenderCombobox.SelectedIndex);
+
+            person.parents = ParentsCombobox.SelectedValue == null ? null : (ParentsCombobox.SelectedValue as dynamic).id;
 
             person.birthPlace = ((PersonBirthPlaceCombobox.SelectedItem as Settlement)?.id ?? -1) == -1 ? null : (PersonBirthPlaceCombobox.SelectedItem as Settlement)!.id;
             person.birth_year = BirthDateYearInput.Text == "" ? null : int.Parse(BirthDateYearInput.Text);
