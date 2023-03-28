@@ -13,21 +13,21 @@ Extra lehetőségek:
 
 Adatbázis:
 	Relationship:
-	    marriageID                  → INT
+		marriageID                  → INT
 		Férj                        → külső kulcs [SzemélyID] ?
 		Feleség                     → külső kulcs [SzemélyID] ?
 		Hely                        → külső kulcs [TelepülésID] ?
 		Idő(év & hónap & nap)       → INT*3 ?
 		Törvényes                   → BOOL
-	
-	
+
+
 	Személyek:
 		SzemélyID                   → INT
 		Szülők                      → külső kulcs [marriageID] ?
 		Vezetéknév                  → VARCHAR ?
 		Keresztnév                  → VARCHAR ?
 		Neme                        → CHAR ?
-		    - F → nő
+			- F → nő
 			- M → férfi
 			- X → egyéb
 
@@ -35,8 +35,6 @@ Adatbázis:
 		Szülidő: év, hónap, nap     → INT ?
 		
 		Halál ideje: év, hónap, nap → INT ?
-			- ha még nem nem halt meg: 0000,00,00
-			- nem tudjuk valamelyiket: null
 		Halál oka                   → VARCHAR ?
 			
 		Foglalkozás                 → VARCHAR ?
@@ -48,12 +46,13 @@ Adatbázis:
 		ID                 → INT
 		Településnév       → VARCHAR
 		TartományID        → külső kulcs [Tartomány.ID] ?
-		OrszágID           → külső kulcs [Ország.ID] ?
-	    
+
+		
 	Tartomány:
 		ID                 → INT
 		Tartománynév       → VARCHAR
-	
+		OrszágID           → külső kulcs [Ország.ID] ?
+
 	Ország:
 		ID                 → INT
 		Országnnév         → VARCHAR
