@@ -609,7 +609,7 @@ namespace Csaladfa
             RelationshipEditButton_Click(new(), new());
         }
 
-        private void PersonRelativeList_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void PersonRelativeList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (PersonRelativeList.SelectedItem == null)
                 return;
