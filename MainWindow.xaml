@@ -80,7 +80,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        
+
                         <Label Content="Vezetéknév:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
                         <TextBox x:Name="PersonSurnameEntry" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
 
@@ -105,7 +105,7 @@
                                 <ColumnDefinition Width="95"/>
                                 <ColumnDefinition Width="70"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="BirthDateYearInput" PreviewTextInput="BirthOrDeathDateYearInput_PreviewTextInput" MaxLength="4" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                            <TextBox x:Name="BirthDateYearInput" PreviewTextInput="BirthOrDeathDateYearInput_PreviewTextInput" MaxLength="4" VerticalContentAlignment="Center" VerticalAlignment="Stretch" Grid.Column="0" HorizontalAlignment="Left" Width="35"/>
                             <ComboBox x:Name="BirthDateMonthInput" SelectedIndex="0" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
                             <ComboBox x:Name="BirthDateDayInput" SelectedIndex="0" VerticalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
                         </Grid>
@@ -120,7 +120,7 @@
                                 <ColumnDefinition Width="95"/>
                                 <ColumnDefinition Width="70"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="DeathDateYearInput" PreviewTextInput="BirthOrDeathDateYearInput_PreviewTextInput" MaxLength="4" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                            <TextBox x:Name="DeathDateYearInput" PreviewTextInput="BirthOrDeathDateYearInput_PreviewTextInput" MaxLength="4" VerticalContentAlignment="Center" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="0"/>
                             <ComboBox x:Name="DeathDateMonthInput" SelectedIndex="0" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
                             <ComboBox x:Name="DeathDateDayInput" SelectedIndex="0" VerticalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
                         </Grid>
